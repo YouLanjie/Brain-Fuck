@@ -6,7 +6,7 @@ int main(int argc,char * argv[]) {
 
 	if (argc != 1) {
 		for (int count = 1; count < argc; count++) {
-			printf("\n\n\033[1;32m%s :\033[0m\n",argv[count]);
+			printf("\033[1;32m%s :\033[0m\n",argv[count]);
 			code(1,argv[count]);
 		}
 		return 0;
@@ -96,7 +96,7 @@ void code(int h,char filename[]) {
 		}
 		switch (a) {
 			case EOF:
-				printf("\033[1;31m\n程序结束，按下任意键继续\n");
+				printf("\033[1;31m\n程序结束，按下任意键继续\033[0m\n\n\n");
 				input();
 				break;
 			case 0x5B:
