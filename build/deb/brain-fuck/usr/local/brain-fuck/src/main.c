@@ -22,7 +22,7 @@ int main(int argc,char * argv[]) {
 			case 0x30:
 			case 0x51:
 			case 0x71:
-				printf("\033[?25h");
+				printf("\033[?25h\n");
 				Clear2
 				return 0;
 				break;
@@ -46,6 +46,12 @@ int main(int argc,char * argv[]) {
 							printf("\a");
 						}
 					}
+				}
+				else {
+					printf("\033[?25h");
+					Clear2
+					return 0;
+					break;
 				}
 				break;
 			case 0x31:
@@ -104,7 +110,7 @@ void code(int h,char filename[]) {
 	fp = fopen(filename,"rb");
 	if (!fp) {
 		printf("\033[1;31m错误[Error]: ");
-		printf("%s: 没有那个文件或者目录\033[0m\n",filename);
+		printf("%s: 没有那个文件或者目录\a\033[0m\n",filename);
 		input();
 		return;
 	}
@@ -143,7 +149,7 @@ void code(int h,char filename[]) {
 				q = 1;
 				if (w1 == 0) {
 					printf("\033[1;31m错误[Error]: ");
-					printf("%s: 循环括号不匹配",filename);
+					printf("%s: 循环括号不匹配\a\033[0m\n",filename);
 					input();
 					fclose(fp);
 					return;
@@ -155,7 +161,7 @@ void code(int h,char filename[]) {
 				fseek(fp,w[w1],0);
 				if (wh == 0) {
 					printf("\033[1;31m错误[Error]: ");
-					printf("%s :循环内没有做任何有意义的动作",filename);
+					printf("%s :循环内没有做任何有意义的动作\a\033[0m\n",filename);
 					input();
 					fclose(fp);
 					return;
