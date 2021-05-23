@@ -1,5 +1,4 @@
 #include "headfile/head.h"
-#include <dirent.h>
 
 int main(int argc,char * argv[]) {
 	int i = 0;
@@ -53,7 +52,7 @@ int main(int argc,char * argv[]) {
 void welcome() {
 	menu("首页");
 	printf("\033[8;11H\033[1;33m1.执行代码\033[8;37H2.历史");
-	printf("\033[9;11H3.帮助");
+	printf("\033[9;11H3.帮助\033[9;37H0.退出");
 	Menu
 	return;
 }
@@ -64,6 +63,7 @@ void code(int h,char filename[]) {
 	long w[500];
 	unsigned short w1 = 0,q = 1;
 	unsigned short ram[500];
+	char wh = 0;
 	FILE * fp;
 
 	if (h == 0) {
@@ -73,8 +73,7 @@ void code(int h,char filename[]) {
 	fp = fopen(filename,"rb");
 	if (!fp) {
 		printf("\033[1;31m错误[Error]: ");
-		printf("%s",filename);
-		printf(":没有那个文件或者目录\033[0m\n");
+		printf("%s: 没有那个文件或者目录\033[0m\n",filename);
 		input();
 		return;
 	}
@@ -103,6 +102,7 @@ void code(int h,char filename[]) {
 				if (ram[i] != 0) {
 					w[w1] = ftell(fp) - 1L;
 					w1++;
+					wh = 0;
 				}
 				else {
 					q = 0;
@@ -111,12 +111,24 @@ void code(int h,char filename[]) {
 			case 0x5D:
 				q = 1;
 				if (w1 == 0) {
+					printf("\033[1;31m错误[Error]: ");
+					printf("%s: 循环括号不匹配",filename);
+					input();
+					fclose(fp);
+					return;
 					break;
 				}
 				else {
 					w1--;
 				}
 				fseek(fp,w[w1],0);
+				if (wh == 0) {
+					printf("\033[1;31m错误[Error]: ");
+					printf("%s :循环内没有做任何有意义的动作",filename);
+					input();
+					fclose(fp);
+					return;
+				}
 				break;
 			case 0x2E:
 				printf("%c",ram[i]);
@@ -128,6 +140,7 @@ void code(int h,char filename[]) {
 				else {
 					i--;
 				}
+				wh++;
 				break;
 			case 0x3E:
 				if (i == 499) {
@@ -136,6 +149,7 @@ void code(int h,char filename[]) {
 				else {
 					i++;
 				}
+				wh++;
 				break;
 			case 0x2D:
 				if (ram[i] == 0) {
@@ -144,6 +158,7 @@ void code(int h,char filename[]) {
 				else {
 					ram[i]--;
 				}
+				wh++;
 				break;
 			case 0x2B:
 				if (ram[i] == 259) {
@@ -152,22 +167,67 @@ void code(int h,char filename[]) {
 				else {
 					ram[i]++;
 				}
+				wh++;
 				break;
 			default:
 				break;
 		}
+		if (kbhit_if() == 1) {
+			getchar();
+			Clear
+			fclose(fp);
+			return;
+		}
 	}
+	Clear
 	fclose(fp);
 	return;
 }
 
 void help() {
-	menu2("帮助");
-	printf("\033[7;11H\033[1;33m1.输入代码时按下Esc退出");
-	printf("\033[8;11H2.存储条只有500个");
-	printf("\033[9;11H3.历史功能直接读取文件信息，不再输入");
-	Menu2
-	input();
+	int a = 0x00;
+	char b = 1;
+
+	while (a != 0x30) {
+		Clear2
+		menu2("帮助");
+		printf("\033[1;33m");
+		if (b == 1) {
+			printf("\033[7;11H1.输入代码时按下Esc退出");
+			printf("\033[8;11H2.存储条只有500个");
+			printf("\033[9;11H3.历史功能直接读取文件信息，不用再次输入");
+		}
+		else if (b == 2) {
+			printf("\033[7;11H4.主界面按下9删除文件");
+			printf("\033[8;11H5.可以执行其他文件，格式\"brain-fuck filename\"");
+			printf("\033[9;11H6.执行程序时按下任意按键退出");
+		}
+		Menu2
+		a = input();
+		if (a == 0x1B) {
+			if (kbhit_if() == 1) {
+				getchar();
+				a = getchar();
+				if (a == 0x41 || a == 0x44) {
+					if (b > 1) {
+						b--;
+					}
+				}
+				else if (a == 0x42 || a == 0x43) {
+					if (b < 2) {
+						b++;
+					}
+				}
+			}
+			else {
+				printf("\033[0m");
+				Clear
+				return;
+			}
+		}
+		Clear
+	}
+	Clear
 	return;
 }
 
@@ -175,7 +235,6 @@ void in() {
 	int i = 0x00;
 	int exit = 1;
 	FILE * fp;
-	DIR * dp;
 
 	fp = fopen("./Brain-Fuck/input.txt","wb");
 	if (!fp) {
