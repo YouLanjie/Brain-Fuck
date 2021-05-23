@@ -1,0 +1,3 @@
+#!/bin/sh
+rm -r /usr/local/brain-fuck
+rm /usr/bin/brain-fuck

@@ -1,0 +1,9 @@
+Package: Brain-Fuck
+Version: 1.0.1
+Description: Brain-fuck语言解释器
+Source: Brain-fuck
+Maintainer: lanjie@github.com
+Architecture: all
+Installed-Size: 2MB
+Depends: gcc
+Pre-Depends: gcc

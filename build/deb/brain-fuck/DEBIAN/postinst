@@ -1,0 +1,3 @@
+#!/bin/sh
+gcc /usr/local/brain-fuck/src/main.c -o /usr/local/brain-fuck/brain-fuck
+ln -s /usr/local/brain-fuck/brain-fuck /usr/bin/brain-fuck
