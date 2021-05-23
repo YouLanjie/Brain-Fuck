@@ -2,6 +2,7 @@
 
 int main(int argc,char * argv[]) {
 	int i = 0;
+	int m = 1;
 
 	if (argc != 1) {
 		for (int count = 1; count < argc; count++) {
@@ -13,17 +14,39 @@ int main(int argc,char * argv[]) {
 	Clear2
 	printf("\033[?25l");
 	while (i != 0x30) {
-		welcome();
+		welcome(m);
+		m = 1;
 		i = input();
-		Clear2
+		Clear
 		switch (i) {
 			case 0x30:
-			case 0x1B:
 			case 0x51:
 			case 0x71:
 				printf("\033[?25h");
 				Clear2
 				return 0;
+				break;
+			case 0x1B:
+				if (kbhit_if() == 1) {
+					getchar();
+					i = getchar();
+					if (i == 0x41 || i == 0x44) {
+						if (m > 1) {
+							m--;
+						}
+						else {
+							printf("\a");
+						}
+					}
+					else if (i == 0x42 || i == 0x43) {
+						if (m < 2) {
+							m++;
+						}
+						else {
+							printf("\a");
+						}
+					}
+				}
 				break;
 			case 0x31:
 				code(0,"./Brain-Fuck/input.txt");
@@ -49,10 +72,18 @@ int main(int argc,char * argv[]) {
 	return 0;
 }
 
-void welcome() {
+void welcome(int m) {
 	menu("首页");
-	printf("\033[8;11H\033[1;33m1.执行代码\033[8;37H2.历史");
-	printf("\033[9;11H3.帮助\033[9;37H0.退出");
+	printf("\033[1;33m");
+	if (m == 1) {
+		printf("\033[8;11H0.退出程序\033[8;37H1.执行代码");
+		printf("\033[9;11H2.执行上一次\033[9;37H3.程序帮助");
+	}
+	else if (m == 2) {
+		printf("\033[8;11H4.执行外部文件\033[8;37H9.删除临时文件");
+	}
+	printf("\033[2;32m\033[6;26H↑\033[10;26H↓\033[0m");
+	printf("\033[11;52H\033[2;32m%d/2\033[1;33m",m);
 	Menu
 	return;
 }
@@ -191,9 +222,9 @@ void help() {
 	while (a == 0x00) {
 		Clear2
 		menu2("帮助");
+		printf("\033[2;32m\033[6;26H↑\033[10;26H↓\033[0m");
 		printf("\033[1;33m");
-		printf("\033[6;26H↑");
-		printf("\033[10;26H↓");
+		printf("");
 		if (b == 1) {
 			printf("\033[7;5H1.↑上翻，↓下翻");
 			printf("\033[8;5H2.输入代码时按下Esc退出");
@@ -218,10 +249,16 @@ void help() {
 					if (b > 1) {
 						b--;
 					}
+					else {
+						printf("\a");
+					}
 				}
 				else if (a == 0x42 || a == 0x43) {
 					if (b < 3) {
 						b++;
+					}
+					else {
+						printf("\a");
 					}
 				}
 				a = 0x00;
@@ -272,7 +309,7 @@ void in() {
 		}
 		else if (i == 0x7F) {
 			if (ftell(fp) == 0) {
-				printf("\033[1;9H\033[1;31mError!\033[0m\007");
+				printf("\033[1;9H\033[1;31mError!\033[0m\a");
 				continue;
 			}
 			fseek(fp,-1L,1);

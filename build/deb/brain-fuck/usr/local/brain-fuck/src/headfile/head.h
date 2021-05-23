@@ -10,7 +10,7 @@
 #define Clear printf("\033[2J\033[1;1H");    //清屏，方便移植
 #define Clear2 system("clear");              //清屏，方便移植
 
-void welcome();                              //开始界面
+void welcome(int m);                         //开始界面
 void code(int h,char filename[]);
 void help();
 
