@@ -185,23 +185,29 @@ void code(int h,char filename[]) {
 }
 
 void help() {
-	int a = 0x00;
+	char a = 0x00;
 	char b = 1;
 
-	while (a != 0x30) {
+	while (a == 0x00) {
 		Clear2
 		menu2("帮助");
 		printf("\033[1;33m");
+		printf("\033[6;26H↑");
+		printf("\033[10;26H↓");
 		if (b == 1) {
-			printf("\033[7;11H1.输入代码时按下Esc退出");
-			printf("\033[8;11H2.存储条只有500个");
-			printf("\033[9;11H3.历史功能直接读取文件信息，不用再次输入");
+			printf("\033[7;5H1.↑上翻，↓下翻");
+			printf("\033[8;5H2.输入代码时按下Esc退出");
+			printf("\033[9;5H3.存储条只有500个");
 		}
 		else if (b == 2) {
-			printf("\033[7;11H4.主界面按下9删除文件");
-			printf("\033[8;11H5.可以执行其他文件，格式\"brain-fuck filename\"");
-			printf("\033[9;11H6.执行程序时按下任意按键退出");
+			printf("\033[7;5H4.历史功能直接读取文件信息，不用再次输入");
+			printf("\033[8;5H5.主界面按下9删除文件");
+			printf("\033[9;5H6.可以执行其他文件，格式\"brain-fuck filename\"");
 		}
+		else if (b == 3) {
+			printf("\033[7;5H7.执行程序时按下任意按键退出");
+		}
+		printf("\033[11;52H\033[2;32m%d/3\033[1;33m",b);
 		Menu2
 		a = input();
 		if (a == 0x1B) {
@@ -214,10 +220,11 @@ void help() {
 					}
 				}
 				else if (a == 0x42 || a == 0x43) {
-					if (b < 2) {
+					if (b < 3) {
 						b++;
 					}
 				}
+				a = 0x00;
 			}
 			else {
 				printf("\033[0m");
