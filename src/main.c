@@ -1,5 +1,4 @@
 #include "headfile/head.h"
-#include <dirent.h>
 
 int main(int argc,char * argv[]) {
 	int i = 0;
@@ -156,7 +155,14 @@ void code(int h,char filename[]) {
 			default:
 				break;
 		}
+		if (kbhit_if() == 1) {
+			getchar();
+			Clear
+			fclose(fp);
+			return;
+		}
 	}
+	Clear
 	fclose(fp);
 	return;
 }
@@ -175,7 +181,6 @@ void in() {
 	int i = 0x00;
 	int exit = 1;
 	FILE * fp;
-	DIR * dp;
 
 	fp = fopen("./Brain-Fuck/input.txt","wb");
 	if (!fp) {
