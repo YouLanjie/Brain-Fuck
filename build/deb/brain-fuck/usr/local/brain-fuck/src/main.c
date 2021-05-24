@@ -17,7 +17,8 @@ int main(int argc,char * argv[]) {
 		welcome(m);
 		m = 1;
 		i = input();
-		Clear
+		printf("\n");
+		Clear2
 		switch (i) {
 			case 0x30:
 			case 0x51:
@@ -65,7 +66,7 @@ int main(int argc,char * argv[]) {
 				break;
 			case 0x39:
 				remove("./Brain-Fuck/input.txt");
-				remove("./Brain-Fuck");
+				rmdir("./Brain-Fuck");
 				break;
 			default:
 				Clear
@@ -109,8 +110,7 @@ void code(int h,char filename[]) {
 	}
 	fp = fopen(filename,"rb");
 	if (!fp) {
-		printf("\033[1;31m错误[Error]: ");
-		printf("%s: 没有那个文件或者目录\a\033[0m\n",filename);
+		printf("\033[1;31m错误[Error]: %s: 没有那个文件或目录\a\033[0m\n",filename);
 		input();
 		return;
 	}
@@ -121,6 +121,9 @@ void code(int h,char filename[]) {
 		w[i] = 0;
 	}
 	i = 0;
+	miss(ram,i);
+	printf("\033[1;16H");
+	kbhit2();
 	while (a != EOF) {
 		a = fgetc(fp);
 		if (a == 0x5D && q == 0) {
@@ -132,7 +135,7 @@ void code(int h,char filename[]) {
 		}
 		switch (a) {
 			case EOF:
-				printf("\033[1;31m\n程序结束，按下任意键继续\033[0m\n\n\n");
+				printf("\033[1;31m\033[14;1H程序结束\033[15;1H按下任意键继续\033[0m");
 				input();
 				break;
 			case 0x5B:
@@ -148,8 +151,8 @@ void code(int h,char filename[]) {
 			case 0x5D:
 				q = 1;
 				if (w1 == 0) {
-					printf("\033[1;31m错误[Error]: ");
-					printf("%s: 循环括号不匹配\a\033[0m\n",filename);
+					Clear
+					printf("\033[1;31m错误[Error]: %s: 循环括号不匹配\a\033[0m\n",filename);
 					input();
 					fclose(fp);
 					return;
@@ -160,8 +163,8 @@ void code(int h,char filename[]) {
 				}
 				fseek(fp,w[w1],0);
 				if (wh == 0) {
-					printf("\033[1;31m错误[Error]: ");
-					printf("%s :循环内没有做任何有意义的动作\a\033[0m\n",filename);
+					Clear
+					printf("\033[1;31m错误[Error]: %s :循环内没有做任何有意义的动作\a\033[0m\n",filename);
 					input();
 					fclose(fp);
 					return;
@@ -169,6 +172,11 @@ void code(int h,char filename[]) {
 				break;
 			case 0x2E:
 				printf("%c",ram[i]);
+				kbhit2();
+				if (ram[i] == 0x0A) {
+					printf("\033[15C");
+					kbhit2();
+				}
 				break;
 			case 0x3C:
 				if (i == 0) {
@@ -178,6 +186,7 @@ void code(int h,char filename[]) {
 					i--;
 				}
 				wh++;
+				miss(ram,i);
 				break;
 			case 0x3E:
 				if (i == 499) {
@@ -187,6 +196,7 @@ void code(int h,char filename[]) {
 					i++;
 				}
 				wh++;
+				miss(ram,i);
 				break;
 			case 0x2D:
 				if (ram[i] == 0) {
@@ -196,6 +206,7 @@ void code(int h,char filename[]) {
 					ram[i]--;
 				}
 				wh++;
+				miss(ram,i);
 				break;
 			case 0x2B:
 				if (ram[i] == 259) {
@@ -205,6 +216,7 @@ void code(int h,char filename[]) {
 					ram[i]++;
 				}
 				wh++;
+				miss(ram,i);
 				break;
 			default:
 				break;
@@ -289,7 +301,7 @@ void in() {
 	fp = fopen("./Brain-Fuck/input.txt","wb");
 	if (!fp) {
 		Clear
-		system("mkdir ./Brain-Fuck");
+		mkdir("./Brain-Fuck",0755);
 		fp = fopen("./Brain-Fuck/input.txt","wb");
 		if (!fp) {
 			return;
@@ -356,5 +368,22 @@ void print() {
 		}
 	}
 	fclose(fp);
+	return;
+}
+
+void miss(unsigned short ram[500],unsigned short i) {
+	printf("\033[s\033[1;1H");
+	kbhit2();
+	for (int count = -6; count < 7; count++) {
+		if (i + count >= 0) {
+			printf("\033[32m[%3d][%3d]    \033[34m|\033[0m\n",i + count + 1,ram[i + count]);
+		}
+		else {
+			printf("\033[32m[NaN][NaN]    \033[34m|\033[0m\n");
+		}
+	}
+	printf("\033[7;12H\033[2;31m<\033[0m\n");
+	printf("\033[u");
+	kbhit2();
 	return;
 }
