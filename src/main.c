@@ -6,13 +6,13 @@ int main(int argc,char * argv[]) {
 
 	if (argc != 1) {
 		for (int count = 1; count < argc; count++) {
-			printf("\033[1;32m%s :\033[0m\n",argv[count]);
+			Clear
 			code(1,argv[count]);
 		}
 		return 0;
 	}
 	Clear2
-	printf("\033[?25l");
+	//printf("\033[?25l");
 	while (i != 0x30) {
 		welcome(m);
 		m = 1;
@@ -99,10 +99,10 @@ void code(int h,char filename[]) {
 	int a = 0;
 	unsigned short i = 0;
 	long w[500];
-	unsigned short w1 = 0,q = 1;
+	unsigned short w1 = 0,q = 1,enter = 0;
 	unsigned short ram[500];
 	char wh = 0;
-	FILE * fp;
+	FILE * fp,* fp2;
 
 	if (h == 0) {
 		in();
@@ -121,9 +121,15 @@ void code(int h,char filename[]) {
 		w[i] = 0;
 	}
 	i = 0;
+	fp2 = fopen("./output.txt","wb");
+	if (!fp2) {
+		printf("\033[1;31m错误[Error]: 当前目录无法创建文件\a\033[0m\n");
+		input();
+		return;
+	}
 	miss(ram,i);
 	printf("\033[1;16H");
-	kbhit2();
+	kbhit();
 	while (a != EOF) {
 		a = fgetc(fp);
 		if (a == 0x5D && q == 0) {
@@ -135,7 +141,7 @@ void code(int h,char filename[]) {
 		}
 		switch (a) {
 			case EOF:
-				printf("\033[1;31m\033[14;1H程序结束\033[15;1H按下任意键继续\033[0m");
+				printf("\033[1;31m\n\033[16C程序结束\n\033[16C按下任意键继续\033[0m");
 				input();
 				break;
 			case 0x5B:
@@ -172,11 +178,23 @@ void code(int h,char filename[]) {
 				break;
 			case 0x2E:
 				printf("%c",ram[i]);
-				kbhit2();
-				if (ram[i] == 0x0A) {
+				fprintf(fp2,"%c",ram[i]);
+				kbhit();
+				if (ram[i] == 0x0A || ram[i] == 0x0C || ram[i] == 0x0D) {
+					if (enter > 14) {
+						printf("\033[1;1H");
+						kbhit();
+						enter = 0;
+					}
+					
 					printf("\033[15C");
-					kbhit2();
+					enter++;
+					kbhit();
 				}
+				break;
+			case 0x2C:
+				ram[i] = input();
+				wh++;
 				break;
 			case 0x3C:
 				if (i == 0) {
@@ -224,11 +242,13 @@ void code(int h,char filename[]) {
 		if (kbhit_if() == 1) {
 			getchar();
 			Clear
+			fclose(fp2);
 			fclose(fp);
 			return;
 		}
 	}
 	Clear
+	fclose(fp2);
 	fclose(fp);
 	return;
 }
@@ -255,6 +275,7 @@ void help() {
 		}
 		else if (b == 3) {
 			printf("\033[7;5H7.执行程序时按下任意按键退出");
+			printf("\033[8;5H8.执行程序时同时会保存输出");
 		}
 		printf("\033[11;52H\033[2;32m%d/3\033[1;33m",b);
 		Menu2
@@ -373,8 +394,8 @@ void print() {
 
 void miss(unsigned short ram[500],unsigned short i) {
 	printf("\033[s\033[1;1H");
-	kbhit2();
-	for (int count = -6; count < 7; count++) {
+	kbhit();
+	for (int count = -7; count < 9; count++) {
 		if (i + count >= 0) {
 			printf("\033[32m[%3d][%3d]    \033[34m|\033[0m\n",i + count + 1,ram[i + count]);
 		}
@@ -382,8 +403,9 @@ void miss(unsigned short ram[500],unsigned short i) {
 			printf("\033[32m[NaN][NaN]    \033[34m|\033[0m\n");
 		}
 	}
-	printf("\033[7;12H\033[2;31m<\033[0m\n");
+	printf("\033[34m---------------\033[0m\n");
+	printf("\033[8;12H\033[2;31m<\033[0m\033[H\n");
 	printf("\033[u");
-	kbhit2();
+	kbhit();
 	return;
 }
