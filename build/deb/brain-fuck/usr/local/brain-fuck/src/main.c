@@ -12,7 +12,7 @@ int main(int argc,char * argv[]) {
 		return 0;
 	}
 	Clear2
-	//printf("\033[?25l");
+	printf("\033[?25l");
 	while (i != 0x30) {
 		welcome(m);
 		m = 1;
@@ -66,6 +66,7 @@ int main(int argc,char * argv[]) {
 				break;
 			case 0x39:
 				remove("./Brain-Fuck/input.txt");
+				remove("./Brain-Fuck/output.txt");
 				rmdir("./Brain-Fuck");
 				break;
 			default:
@@ -99,7 +100,7 @@ void code(int h,char filename[]) {
 	int a = 0;
 	unsigned short i = 0;
 	long w[500];
-	unsigned short w1 = 0,q = 1,enter = 0;
+	unsigned short w1 = 0,q = 1,enter = 0,ch = 0;
 	unsigned short ram[500];
 	char wh = 0;
 	FILE * fp,* fp2;
@@ -121,14 +122,14 @@ void code(int h,char filename[]) {
 		w[i] = 0;
 	}
 	i = 0;
-	fp2 = fopen("./output.txt","wb");
+	fp2 = fopen("./Brain-Fuck/output.txt","wb");
 	if (!fp2) {
 		printf("\033[1;31m错误[Error]: 当前目录无法创建文件\a\033[0m\n");
 		input();
 		return;
 	}
 	miss(ram,i);
-	printf("\033[1;16H");
+	printf("\033[3;16H");
 	kbhit();
 	while (a != EOF) {
 		a = fgetc(fp);
@@ -177,19 +178,67 @@ void code(int h,char filename[]) {
 				}
 				break;
 			case 0x2E:
-				printf("%c",ram[i]);
-				fprintf(fp2,"%c",ram[i]);
-				kbhit();
 				if (ram[i] == 0x0A || ram[i] == 0x0C || ram[i] == 0x0D) {
 					if (enter > 14) {
-						printf("\033[1;1H");
+						printf("\033[2;1H");
 						kbhit();
 						enter = 0;
 					}
-					
 					printf("\033[15C");
 					enter++;
+					ch = 0;
+					printf("%c",ram[i]);
+					fprintf(fp2,"%c",ram[i]);
 					kbhit();
+				}
+				else if (ram[i] == 0x09) {
+					if (ch + 8 > 58) {
+						if (enter > 14) {
+							printf("\033[2;14H");
+							kbhit();
+							enter = 0;
+						}
+						else {
+							printf("\n\033[15C");
+							enter++;
+							ch = 0;
+							kbhit();
+						}
+					}
+					ch += 8;
+					printf("%c",ram[i]);
+					fprintf(fp2,"%c",ram[i]);
+					kbhit();
+				}
+				else if (ram[i] == 0x0B) {
+					if (enter > 14) {
+						printf("\033[15A");
+						kbhit();
+						enter = 0;
+					}
+					enter++;
+					printf("%c",ram[i]);
+					fprintf(fp2,"%c",ram[i]);
+					kbhit();
+				}
+				else {
+					printf("%c",ram[i]);
+					fprintf(fp2,"%c",ram[i]);
+					kbhit();
+					ch++;
+					if (ch > 59) {
+						if (enter > 14) {
+							printf("\033[2;1H");
+							kbhit();
+							enter = 0;
+						}
+						else {
+							printf("\n\033[15C");
+							enter++;
+							ch = 0;
+							kbhit();
+						}
+					}
 				}
 				break;
 			case 0x2C:
@@ -276,6 +325,7 @@ void help() {
 		else if (b == 3) {
 			printf("\033[7;5H7.执行程序时按下任意按键退出");
 			printf("\033[8;5H8.执行程序时同时会保存输出");
+			printf("\033[9;5H9.不要将窗口缩小到比程序界面还要小");
 		}
 		printf("\033[11;52H\033[2;32m%d/3\033[1;33m",b);
 		Menu2
@@ -395,16 +445,17 @@ void print() {
 void miss(unsigned short ram[500],unsigned short i) {
 	printf("\033[s\033[1;1H");
 	kbhit();
+	printf("\033[1;1H\033[34m---------------\033[33m--------------------------------------------------------------\033[0m\n");
 	for (int count = -7; count < 9; count++) {
 		if (i + count >= 0) {
-			printf("\033[32m[%3d][%3d]    \033[34m|\033[0m\n",i + count + 1,ram[i + count]);
+			printf("\033[32m[%3d][%3d]    \033[34m|\033[33m\033[61C|\033[0m\n",i + count + 1,ram[i + count]);
 		}
 		else {
-			printf("\033[32m[NaN][NaN]    \033[34m|\033[0m\n");
+			printf("\033[32m[NaN][NaN]    \033[34m|\033[33m\033[61C|\033[0m\n");
 		}
 	}
-	printf("\033[34m---------------\033[0m\n");
-	printf("\033[8;12H\033[2;31m<\033[0m\033[H\n");
+	printf("\033[34m---------------\033[33m--------------------------------------------------------------\033[0m\n");
+	printf("\033[9;12H\033[2;31m<\033[0m\033[H\n");
 	printf("\033[u");
 	kbhit();
 	return;
