@@ -12,7 +12,7 @@ int main(int argc,char * argv[]) {
 		return 0;
 	}
 	Clear2
-	printf("\033[?25l");
+	//printf("\033[?25l");
 	while (i != 0x30) {
 		welcome(m);
 		m = 1;
@@ -66,7 +66,7 @@ int main(int argc,char * argv[]) {
 				break;
 			case 0x39:
 				remove("./Brain-Fuck/input.txt");
-				remove("./Brain-Fuck/output.txt");
+				remove("./output.txt");
 				rmdir("./Brain-Fuck");
 				break;
 			default:
@@ -100,7 +100,8 @@ void code(int h,char filename[]) {
 	int a = 0;
 	unsigned short i = 0;
 	long w[500];
-	unsigned short w1 = 0,q = 1,enter = 0,ch = 0;
+	unsigned short w1 = 0,q = 1,enter = 0;
+	short ch = 0;
 	unsigned short ram[500];
 	char wh = 0;
 	FILE * fp,* fp2;
@@ -122,7 +123,7 @@ void code(int h,char filename[]) {
 		w[i] = 0;
 	}
 	i = 0;
-	fp2 = fopen("./Brain-Fuck/output.txt","wb");
+	fp2 = fopen("./output.txt","wb");
 	if (!fp2) {
 		printf("\033[1;31m错误[Error]: 当前目录无法创建文件\a\033[0m\n");
 		input();
@@ -178,65 +179,87 @@ void code(int h,char filename[]) {
 				}
 				break;
 			case 0x2E:
+				printf("%c",ram[i]);
+				fprintf(fp2,"%c",ram[i]);
+				kbhit();
 				if (ram[i] == 0x0A || ram[i] == 0x0C || ram[i] == 0x0D) {
+					enter++;
 					if (enter > 14) {
-						printf("\033[2;1H");
+						printf("\033[2;16H");
 						kbhit();
 						enter = 0;
 					}
-					printf("\033[15C");
-					enter++;
 					ch = 0;
-					printf("%c",ram[i]);
-					fprintf(fp2,"%c",ram[i]);
-					kbhit();
+				}
+				else if (ram[i] == 0x08) {
+					ch--;
+					if (ch > 0) {
+						kbhit();
+					}
+					else {
+						if (enter > 0) {
+							printf("\n\033[2A\033[74C");
+							kbhit();
+							ch = 58;
+							enter--;
+						}
+						else {
+							printf("\033[2;16H");
+							kbhit();
+							ch = 0;
+						}
+					}
 				}
 				else if (ram[i] == 0x09) {
-					if (ch + 8 > 58) {
+					if (ch == 0) {
+						ch++;
+					}
+					else {
+						ch += 8;
+					}
+					if (ch > 58) {
+						ch = 0;
 						if (enter > 14) {
-							printf("\033[2;14H");
+							printf("\033[2;16H");
 							kbhit();
 							enter = 0;
 						}
 						else {
 							printf("\n\033[15C");
-							enter++;
-							ch = 0;
 							kbhit();
+							enter++;
 						}
 					}
-					ch += 8;
-					printf("%c",ram[i]);
-					fprintf(fp2,"%c",ram[i]);
-					kbhit();
 				}
 				else if (ram[i] == 0x0B) {
+					enter++;
 					if (enter > 14) {
 						printf("\033[15A");
 						kbhit();
 						enter = 0;
 					}
-					enter++;
-					printf("%c",ram[i]);
-					fprintf(fp2,"%c",ram[i]);
-					kbhit();
 				}
 				else {
-					printf("%c",ram[i]);
-					fprintf(fp2,"%c",ram[i]);
-					kbhit();
-					ch++;
-					if (ch > 59) {
+					if (ram[i] < 0x08) {
+						kbhit();
+					}
+					else if (ram[i] == 0x7F) {
+						kbhit();
+					}
+					else {
+						ch++;
+					}
+					if (ch > 58) {
+						ch = 0;
 						if (enter > 14) {
-							printf("\033[2;1H");
+							printf("\033[2;16H");
 							kbhit();
 							enter = 0;
 						}
 						else {
 							printf("\n\033[15C");
-							enter++;
-							ch = 0;
 							kbhit();
+							enter++;
 						}
 					}
 				}
