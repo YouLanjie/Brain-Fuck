@@ -12,7 +12,7 @@ int main(int argc,char * argv[]) {
 		return 0;
 	}
 	Clear2
-	//printf("\033[?25l");
+	printf("\033[?25l");
 	while (i != 0x30) {
 		welcome(m);
 		m = 1;
@@ -182,7 +182,7 @@ void code(int h,char filename[]) {
 				printf("%c",ram[i]);
 				fprintf(fp2,"%c",ram[i]);
 				kbhit();
-				if (ram[i] == 0x0A || ram[i] == 0x0C || ram[i] == 0x0D) {
+				if (ram[i] == 0x0A || ram[i] == 0x0C || ram[i] == 0x0D || ram[i] == 0x1D) {
 					enter++;
 					if (enter > 14) {
 						printf("\033[2;16H");
@@ -240,10 +240,7 @@ void code(int h,char filename[]) {
 					}
 				}
 				else {
-					if (ram[i] < 0x08) {
-						kbhit();
-					}
-					else if (ram[i] == 0x7F) {
+					if (ram[i] < 0x08 || ram[i] == 0x7F || ( ram[i] > 0x0E && ram[i] < 0x1F)) {
 						kbhit();
 					}
 					else {
