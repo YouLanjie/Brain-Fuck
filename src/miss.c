@@ -2,7 +2,7 @@
 
 void miss(unsigned short ram[500],unsigned short i) {
 	printf("\033[s\033[1;1H");
-	kbhit();
+	kbhit2();
 	printf("\033[1;1H\033[34m---------------\033[33m--------------------------------------------------------------\033[0m\n");
 	for (int count = -7; count < 9; count++) {
 		if (i + count >= 0) {
@@ -15,6 +15,6 @@ void miss(unsigned short ram[500],unsigned short i) {
 	printf("\033[34m---------------\033[33m--------------------------------------------------------------\033[0m\n");
 	printf("\033[9;12H\033[2;31m<\033[0m\033[H\n");
 	printf("\033[u");
-	kbhit();
+	kbhit2();
 	return;
 }

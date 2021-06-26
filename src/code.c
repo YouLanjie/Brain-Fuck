@@ -2,7 +2,7 @@
 #include <sys/stat.h>
 
 void code(int h,char filename[]) {
-	struct Input * pTemp = NULL;
+	struct Input * pHead = NULL, * pTemp = NULL;
 
 	long w[500];
 	int a = 0;
@@ -15,18 +15,20 @@ void code(int h,char filename[]) {
 	FILE * fp,* fp2;
 
 	mkdir("Brain-Fuck", 0744);
-	fp = fopen(filename, "w");
-	if(!fp) {
-		perror("\033[1;31m[Code]\033[0m");
-		input();
-		return;
-	}
 	if (h == 0) {
-		pTemp = New();
+		pHead = pTemp = New();
+		fp = fopen(filename, "w");
+		if(!fp) {
+			perror("\033[1;31m[Code]\033[0m");
+			input();
+			return;
+		}
 		while (pTemp != NULL) {
 			fprintf(fp,"%c",pTemp -> m);
 			pTemp = pTemp -> pNext;
 		}
+		free(pHead);
+		pHead = NULL;
 		fclose(fp);
 		Clear2
 	}
@@ -50,7 +52,7 @@ void code(int h,char filename[]) {
 	}
 	miss(ram,i);
 	printf("\033[3;16H");
-	kbhit();
+	kbhit2();
 	while (a != EOF) {
 		a = fgetc(fp);
 		if (a == 0x5D && q == 0) {
@@ -98,12 +100,12 @@ void code(int h,char filename[]) {
 				if(fp2) {
 					fprintf(fp2,"%c",ram[i]);
 				}
-				kbhit();
+				kbhit2();
 				if (ram[i] == 0x0A || ram[i] == 0x0C || ram[i] == 0x0D || ram[i] == 0x1D) {
 					enter++;
 					if (enter > 14) {
 						printf("\033[2;16H");
-						kbhit();
+						kbhit2();
 						enter = 0;
 					}
 					ch = 0;
@@ -111,18 +113,18 @@ void code(int h,char filename[]) {
 				else if (ram[i] == 0x08) {
 					ch--;
 					if (ch > 0) {
-						kbhit();
+						kbhit2();
 					}
 					else {
 						if (enter > 0) {
 							printf("\n\033[2A\033[74C");
-							kbhit();
+							kbhit2();
 							ch = 58;
 							enter--;
 						}
 						else {
 							printf("\033[2;16H");
-							kbhit();
+							kbhit2();
 							ch = 0;
 						}
 					}
@@ -138,12 +140,12 @@ void code(int h,char filename[]) {
 						ch = 0;
 						if (enter > 14) {
 							printf("\033[2;16H");
-							kbhit();
+							kbhit2();
 							enter = 0;
 						}
 						else {
 							printf("\n\033[15C");
-							kbhit();
+							kbhit2();
 							enter++;
 						}
 					}
@@ -152,13 +154,13 @@ void code(int h,char filename[]) {
 					enter++;
 					if (enter > 14) {
 						printf("\033[15A");
-						kbhit();
+						kbhit2();
 						enter = 0;
 					}
 				}
 				else {
 					if (ram[i] < 0x08 || ram[i] == 0x7F || ( ram[i] > 0x0E && ram[i] < 0x1F)) {
-						kbhit();
+						kbhit2();
 					}
 					else {
 						ch++;
@@ -167,12 +169,12 @@ void code(int h,char filename[]) {
 						ch = 0;
 						if (enter > 14) {
 							printf("\033[2;16H");
-							kbhit();
+							kbhit2();
 							enter = 0;
 						}
 						else {
 							printf("\n\033[15C");
-							kbhit();
+							kbhit2();
 							enter++;
 						}
 					}
@@ -233,13 +235,13 @@ void code(int h,char filename[]) {
 			return;
 		}
 	}
+	printf("\033[1;31m\n\033[16C程序结束\n\033[16C按下任意键继续\033[0m");
+	input();
 	Clear
 	fclose(fp);
 	if (fp2) {
 		fclose(fp2);
 	}
-	printf("\033[1;31m\n\033[16C程序结束\n\033[16C按下任意键继续\033[0m");
-	input();
 	return;
 }
 

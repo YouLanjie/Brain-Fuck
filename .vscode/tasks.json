@@ -15,7 +15,7 @@
                                 "${fileDirname}/tool/kbhit.c",
                                 "${fileDirname}/tool/menu.c",
                                 "-o",
-                                "${fileDirname}/../bin/${fileBasenameNoExtension}"
+                                "${fileDirname}/../bin/main"
                         ],
                         "options": {
                                 "cwd": "${workspaceFolder}"
