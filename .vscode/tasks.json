@@ -6,9 +6,16 @@
                         "command": "/usr/bin/gcc",
                         "args": [
                                 "-g",
-                                "${file}",
+                                "${fileDirname}/code.c",
+                                "${fileDirname}/help.c",
+                                "${fileDirname}/Input.c",
+                                "${fileDirname}/main.c",
+                                "${fileDirname}/miss.c",
+                                "${fileDirname}/welcome.c",
+                                "${fileDirname}/tool/kbhit.c",
+                                "${fileDirname}/tool/menu.c",
                                 "-o",
-                                "${fileDirname}/../build/${fileBasenameNoExtension}"
+                                "${fileDirname}/../bin/${fileBasenameNoExtension}"
                         ],
                         "options": {
                                 "cwd": "${workspaceFolder}"
