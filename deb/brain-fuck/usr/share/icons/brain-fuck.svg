@@ -13,8 +13,8 @@
    viewBox="0 0 256 256"
    version="1.1"
    id="svg30"
-   sodipodi:docname="cgame2.svg"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+   sodipodi:docname="brain-fuck.svg"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)">
   <metadata
      id="metadata34">
     <rdf:RDF>
@@ -36,7 +36,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1440"
-     inkscape:window-height="860"
+     inkscape:window-height="868"
      id="namedview32"
      showgrid="false"
      inkscape:snap-global="true"
@@ -53,7 +53,8 @@
      inkscape:current-layer="svg30"
      inkscape:snap-smooth-nodes="true"
      inkscape:bbox-nodes="false"
-     inkscape:bbox-paths="false" />
+     inkscape:bbox-paths="false"
+     inkscape:document-rotation="0" />
   <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
   <title
      id="title2">deepin-repair-tools</title>
@@ -61,6 +62,30 @@
      id="desc4">Created with Sketch.</desc>
   <defs
      id="defs20">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient63">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop59" />
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1"
+         offset="1"
+         id="stop61" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient55">
+      <stop
+         style="stop-color:#00ffff;stop-opacity:1"
+         offset="0"
+         id="stop51" />
+      <stop
+         style="stop-color:#803300;stop-opacity:1"
+         offset="1"
+         id="stop53" />
+    </linearGradient>
     <linearGradient
        x1="50%"
        y1="92.4095403%"
@@ -101,65 +126,24 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient-2"
-       id="linearGradient4058"
-       x1="29.288136"
-       y1="24.949156"
-       x2="225.62712"
-       y2="232.13559"
+       xlink:href="#linearGradient55"
+       id="linearGradient57"
+       x1="306.15378"
+       y1="25.726595"
+       x2="19.963863"
+       y2="66.460777"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.64440693,0,0,0.64440693,8.7105591,9.7849367)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient63"
+       id="linearGradient65"
+       x1="29.059652"
+       y1="212.00328"
+       x2="131.4752"
+       y2="123.93437"
        gradientUnits="userSpaceOnUse" />
   </defs>
-  <rect
-     style="fill:url(#linearGradient4058);fill-opacity:1;stroke:#000000;stroke-opacity:1"
-     id="rect3956"
-     width="237.01695"
-     height="237.01695"
-     x="10.305084"
-     y="9.2203436"
-     ry="53.694916"
-     rx="0" />
-  <path
-     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 49.898304,87.322037 H 212.61016"
-     id="path4060"
-     inkscape:connector-curvature="0" />
-  <path
-     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 49.898304,148.61017 H 212.61016"
-     id="path4060-6"
-     inkscape:connector-curvature="0" />
-  <path
-     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 162.08465,44.08795 V 206.79981"
-     id="path4060-5"
-     inkscape:connector-curvature="0" />
-  <path
-     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 98.627021,44.087951 V 206.79981"
-     id="path4060-5-3"
-     inkscape:connector-curvature="0" />
-  <circle
-     style="fill:#000000;fill-opacity:1;stroke-width:1.02777779"
-     id="path4119"
-     cx="131.25423"
-     cy="118.50848"
-     r="30.101694" />
-  <circle
-     style="fill:#000000;fill-opacity:1;stroke-width:1.02777779"
-     id="path4119-5"
-     cx="193.08475"
-     cy="178.44069"
-     r="30.101694" />
-  <path
-     style="fill:#ffffff;fill-opacity:1;stroke-width:0.54237288"
-     d="m 183.83787,147.42035 c -10.32747,-2.50002 -19.29861,-11.56322 -21.75322,-21.97647 -2.42587,-10.29127 0.50006,-20.41296 8.06101,-27.885552 4.49808,-4.445512 7.86597,-6.385139 13.65994,-7.866985 5.3057,-1.356971 9.24568,-1.356971 14.55138,0 5.29921,1.355308 8.92029,3.311178 12.8525,6.942072 12.54869,11.587105 12.90845,30.637765 0.80744,42.756975 -7.60014,7.61157 -17.84617,10.5313 -28.17905,8.02996 z"
-     id="path4142"
-     inkscape:connector-curvature="0" />
-  <path
-     style="fill:#ffffff;fill-opacity:1;stroke-width:0.54237288"
-     d="m 125.12013,208.4614 c -10.32747,-2.50002 -19.29861,-11.56322 -21.75322,-21.97647 -2.42587,-10.29127 0.50006,-20.41296 8.06101,-27.88555 4.49808,-4.44551 7.86597,-6.38514 13.65994,-7.86698 5.3057,-1.35697 9.24568,-1.35697 14.55138,0 5.29921,1.35531 8.92029,3.31118 12.8525,6.94207 12.54869,11.5871 12.90845,30.63776 0.80744,42.75697 -7.60014,7.61157 -17.84617,10.5313 -28.17905,8.02996 z"
-     id="path4142-2"
-     inkscape:connector-curvature="0" />
   <path
      style="fill:#ffffff;fill-opacity:1;stroke-width:0.54237288"
      d="m 61.120138,145.54615 c -10.32747,-2.50002 -19.29861,-11.56322 -21.75322,-21.97647 -2.42587,-10.29127 0.50006,-20.41296 8.06101,-27.885551 4.49808,-4.445512 7.86597,-6.385139 13.65994,-7.866985 5.3057,-1.356971 9.24568,-1.356971 14.55138,0 5.29921,1.355308 8.92029,3.311178 12.8525,6.942072 12.548682,11.587104 12.908442,30.637764 0.80744,42.756974 -7.60014,7.61157 -17.84617,10.5313 -28.17905,8.02996 z"
@@ -170,22 +154,44 @@
      d="m 123.49302,84.800389 c -10.32747,-2.50002 -19.29861,-11.56322 -21.75322,-21.97647 -2.425871,-10.29127 0.50006,-20.41296 8.06101,-27.885552 4.49808,-4.445512 7.86597,-6.385139 13.65994,-7.866985 5.3057,-1.356971 9.24568,-1.356971 14.55138,0 5.29921,1.355308 8.92029,3.311178 12.8525,6.942072 12.54869,11.587105 12.90845,30.637765 0.80744,42.756975 -7.60014,7.61157 -17.84617,10.5313 -28.17905,8.02996 z"
      id="path4142-1"
      inkscape:connector-curvature="0" />
-  <circle
-     style="fill:#000000;fill-opacity:1;stroke-width:1.02777779"
-     id="path4119-2"
-     cx="66.711861"
-     cy="56.406784"
-     r="30.101694" />
-  <circle
-     style="fill:#000000;fill-opacity:1;stroke-width:1.02777779"
-     id="path4119-7"
-     cx="191.99998"
-     cy="56.406784"
-     r="30.101694" />
-  <circle
-     style="fill:#000000;fill-opacity:1;stroke-width:1.02777779"
-     id="path4119-0"
-     cx="68.338982"
-     cy="177.89832"
-     r="30.101694" />
+  <rect
+     style="fill:#000000"
+     id="rect31"
+     width="244.59477"
+     height="244.59477"
+     x="5.7289295"
+     y="6.6655025" />
+  <text
+     xml:space="preserve"
+     style="font-size:36.9167px;line-height:1.25;font-family:'文鼎ＰＬ简中楷';-inkscape-font-specification:'文鼎ＰＬ简中楷';letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient57);fill-opacity:1;stroke-width:0.922915"
+     x="21.831255"
+     y="51.935398"
+     id="text37"
+     transform="scale(0.79218042,1.2623387)"><tspan
+       sodipodi:role="line"
+       id="tspan35"
+       x="21.831255"
+       y="51.935398"
+       style="fill:url(#linearGradient57);fill-opacity:1;stroke-width:0.922915">Brain Fuck</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:30.0682px;line-height:1.25;font-family:'文鼎ＰＬ简中楷';-inkscape-font-specification:'文鼎ＰＬ简中楷';letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient65);fill-opacity:1;stroke-width:0.751706"
+     x="28.294458"
+     y="143.5137"
+     id="text41"><tspan
+       sodipodi:role="line"
+       x="28.294458"
+       y="143.5137"
+       id="tspan43"
+       style="fill:url(#linearGradient65);fill-opacity:1;stroke-width:0.751706">&gt; Hello,</tspan><tspan
+       sodipodi:role="line"
+       x="28.294458"
+       y="181.09895"
+       style="fill:url(#linearGradient65);fill-opacity:1;stroke-width:0.751706"
+       id="tspan47">  World!</tspan><tspan
+       sodipodi:role="line"
+       x="28.294458"
+       y="218.6842"
+       style="fill:url(#linearGradient65);fill-opacity:1;stroke-width:0.751706"
+       id="tspan49">&gt;</tspan></text>
 </svg>
