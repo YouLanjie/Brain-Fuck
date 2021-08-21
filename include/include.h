@@ -16,6 +16,7 @@
 /* pass */
 #include <string.h>
 /* strcat() strcmp() strcpy() */
+#include <dirent.h>
 
 #ifndef Clear
 	#define Clear printf("\033[2J\033[1;1H");
@@ -31,14 +32,8 @@ int kbhit_if();
 int kbhit2();
 
 /* menu */
-void menu(char a[50]);
-void menu2(char a[50]);
-#ifndef Menu
-	#define Menu printf("\033[0m\033[11;11H");
-#endif
-#ifndef Menu2
-	#define Menu2 printf("\033[0m\033[11;19H");
-#endif
+void menu(char title[50], short p, short a);
+void menu2(char title[50]);
 
 /* pid */
 /* #include <sys/types.h> */
