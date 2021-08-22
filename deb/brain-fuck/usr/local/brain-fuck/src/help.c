@@ -8,7 +8,7 @@ void help() {
 		Clear2
 		printf("\033[2;32m\033[6;26H↑\033[10;26H↓\033[0m");
 		printf("\033[1;33m");
-		kbhit2();
+		KbhitNoTime();
 		if (b == 1) {
 			printf("\033[7;5H1.↑上翻，↓下翻");
 			printf("\033[8;5H2.输入代码时按下Esc退出");
@@ -25,10 +25,10 @@ void help() {
 			printf("\033[9;5H9.不要将窗口缩小到比程序界面还要小");
 		}
 		printf("\033[11;52H\033[2;32m%d/3\033[1;33m",b);
-		menu2("帮助");
-		a = input();
+		Menu2("帮助");
+		a = Input();
 		if (a == 0x1B) {
-			if (kbhit_if() == 1) {
+			if (KbhitHas() == 1) {
 				getchar();
 				a = getchar();
 				if (a == 0x41 || a == 0x44) {

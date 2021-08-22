@@ -9,7 +9,7 @@ void welcome(int m) {
 	else if (m == 2) {
 		printf("\033[8;11H4.执行外部文件\033[8;37H9.删除临时文件");
 	}
-	menu("首页",m,2);
+	Menu("首页",m,2);
 	return;
 }
 

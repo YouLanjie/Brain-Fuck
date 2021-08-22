@@ -1,8 +1,8 @@
 #include "include.h"                         //头文件
 
-struct Input {
+struct InputStruct {
         int m;
-        struct Input * pNext;
+        struct InputStruct * pNext;
 };
 
 /* 定义函数 */
@@ -13,5 +13,5 @@ void help();
 void print();                               //读取文件并打印
 void miss(unsigned short ram[500],unsigned short i);
 
-struct Input * New();
+struct InputStruct * New();
 

@@ -16,7 +16,7 @@ int main(int argc,char * argv[]) {
 	while (i != 0x30) {
 		welcome(m);
 		m = 1;
-		i = input();
+		i = Input();
 		printf("\n");
 		Clear2
 		switch (i) {
@@ -31,7 +31,7 @@ int main(int argc,char * argv[]) {
 				return 0;
 				break;
 			case 0x1B:
-				if (kbhit_if() == 1) {
+				if (KbhitHas() == 1) {
 					getchar();
 					i = getchar();
 					if (i == 0x41 || i == 0x44) {

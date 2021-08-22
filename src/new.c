@@ -1,23 +1,23 @@
 #include "../include/head.h"
 
-struct Input * New() {
-	struct Input * pHead = NULL;
-	struct Input * pNew,* pEnd;
-	struct Input * pTemp;
+struct InputStruct * New() {
+	struct InputStruct * pHead = NULL;
+	struct InputStruct * pNew,* pEnd;
+	struct InputStruct * pTemp;
 
 	int exit = 1;
 
-	pEnd = pNew = pHead = (struct Input *)malloc(sizeof(struct Input));
+	pEnd = pNew = pHead = (struct InputStruct *)malloc(sizeof(struct InputStruct));
 	pHead -> pNext = NULL;
 	pHead -> m = 0x00;
 
 	do {
 		if (pEnd -> m != 0) {
-			pNew = (struct Input *)malloc(sizeof(struct Input));
+			pNew = (struct InputStruct *)malloc(sizeof(struct InputStruct));
 			pNew -> pNext = NULL;
 			pEnd -> pNext = NULL;
 		}
-		pNew -> m = input();
+		pNew -> m = Input();
 		printf("%c",pNew -> m);
 		if (pNew -> m == 0x1B) {
 			free(pNew);
@@ -29,7 +29,7 @@ struct Input * New() {
 				if (pNew != pEnd) {
 					free(pHead);
 				}
-				pEnd = pNew = pHead = (struct Input *)malloc(sizeof(struct Input));
+				pEnd = pNew = pHead = (struct InputStruct *)malloc(sizeof(struct InputStruct));
 				pHead -> pNext = NULL;
 				pHead -> m = 0x00;
 				printf("\n");
