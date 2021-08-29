@@ -3,6 +3,8 @@
 int main(int argc,char * argv[]) {
 	int i = 0;
 	int m = 1;
+	struct winsize size;
+	int startSize = 0;
 
 	if (argc != 1) {
 		for (int count = 1; count < argc; count++) {
@@ -14,7 +16,17 @@ int main(int argc,char * argv[]) {
 	Clear2
 	printf("\033[?25l");
 	while (i != 0x30) {
-		welcome(m);
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+		startSize = size.ws_col / 2 - 20;
+		printf("\033[1;33m");
+		if (m == 1) {
+			printf("\033[8;%dH0.退出程序\033[8;%dH1.执行代码", startSize, startSize + 32);
+			printf("\033[9;%dH2.执行上一次\033[9;%dH3.程序帮助", startSize, startSize + 32);
+		}
+		else if (m == 2) {
+			printf("\033[8;%dH4.执行外部文件\033[8;%dH9.删除临时文件", startSize, startSize + 32);
+		}
+		Menu("首页",m,2);
 		m = 1;
 		i = Input();
 		printf("\n");
