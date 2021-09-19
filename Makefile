@@ -14,13 +14,12 @@ $(prom): $(OBJ)
 	$(CC) $(OBJ) -o $(prom)
 	@mkdir bin
 	@mv $(prom) $(BIN)/main
-	@rm -rf $(OBJ)
 
 %.o: %.c $(incl)
 	$(CC) -c $< -o $@
 
 clean:
-	@rm -rf $(OBJ) $(BIN) $(prom).deb
+	@rm -rf $(OBJ) $(prom).deb
 
 building:
 	@rm -r ./deb/$(prom)/usr/local/$(prom)/*

@@ -6,7 +6,6 @@ struct InputStruct {
 };
 
 /* 定义函数 */
-void welcome(int m);                         //开始界面
 void code(int h,char filename[]);
 void help();
 
