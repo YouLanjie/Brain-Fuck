@@ -1,3 +1,0 @@
-#!/bin/sh
-gcc /usr/local/brain-fuck/src/*.c /usr/local/brain-fuck/src/tool/*.c -o /usr/local/brain-fuck/brain-fuck
-ln -s /usr/local/brain-fuck/brain-fuck /usr/bin/brain-fuck
