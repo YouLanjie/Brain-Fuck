@@ -28,7 +28,7 @@ int main(int argc,char * argv[]) {
 		}
 		Menu("首页",m,2);
 		m = 1;
-		i = Input();
+		i = getch();
 		printf("\n");
 		Clear2
 		switch (i) {
@@ -43,7 +43,7 @@ int main(int argc,char * argv[]) {
 				return 0;
 				break;
 			case 0x1B:
-				if (KbhitHas() == 1) {
+				if (kbhit() == 1) {
 					getchar();
 					i = getchar();
 					if (i == 0x41 || i == 0x44) {

@@ -17,7 +17,7 @@ struct InputStruct * New() {
 			pNew -> pNext = NULL;
 			pEnd -> pNext = NULL;
 		}
-		pNew -> m = Input();
+		pNew -> m = getch();
 		printf("%c",pNew -> m);
 		if (pNew -> m == 0x1B) {
 			free(pNew);

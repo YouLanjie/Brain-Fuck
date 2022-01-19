@@ -1,5 +1,4 @@
 #include "../include/head.h"
-#include <stdio.h>
 
 void help() {
 	char a = 0x00;
@@ -12,7 +11,7 @@ void help() {
 		printf("\033[1;33m");
 		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
 		startSize = size.ws_col / 2 - 20;
-		KbhitNoTime();
+		kbhitGetchar();
 		if (b == 1) {
 			printf("\033[7;%dH1.↑上翻，↓下翻", startSize);
 			printf("\033[8;%dH2.输入代码时按下Esc退出", startSize);
@@ -31,9 +30,9 @@ void help() {
 		Menu("帮助",b,3);
 		printf("\033[20D                    ");
 		Menu2("帮助");
-		a = Input();
+		a = getch();
 		if (a == 0x1B) {
-			if (KbhitHas() == 1) {
+			if (kbhit() == 1) {
 				getchar();
 				a = getchar();
 				if (a == 0x41 || a == 0x44) {

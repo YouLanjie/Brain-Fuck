@@ -19,7 +19,7 @@ void code(int h,char filename[]) {
 		fp = fopen(filename, "w");
 		if(!fp) {
 			perror("\033[1;31m[Code]\033[0m");
-			Input();
+			getch();
 			return;
 		}
 		while (pTemp != NULL) {
@@ -34,7 +34,7 @@ void code(int h,char filename[]) {
 	fp = fopen(filename,"rb");
 	if (!fp) {
 		printf("\033[1;31m错误[Error]: %s: 没有那个文件或目录\a\033[0m\n",filename);
-		Input();
+		getch();
 		return;
 	}
 	for (i = 0; i < 500; i++) {
@@ -47,11 +47,11 @@ void code(int h,char filename[]) {
 	fp2 = fopen("./Brain-Fuck/output.txt","wb");
 	if (!fp2) {
 		printf("\033[1;31m错误[Error]: 当前目录无法创建文件，无法记录输出\a\033[0m\n");
-		Input();
+		getch();
 	}
 	miss(ram,i);
 	printf("\033[3;16H");
-	KbhitNoTime();
+	kbhitGetchar();
 	while (a != EOF) {
 		a = fgetc(fp);
 		if (a == 0x5D && q == 0) {
@@ -77,7 +77,7 @@ void code(int h,char filename[]) {
 				if (w1 == 0) {
 					Clear
 					printf("\033[1;31m错误[Error]: %s: 循环括号不匹配\a\033[0m\n",filename);
-					Input();
+					getch();
 					fclose(fp);
 					return;
 					break;
@@ -89,7 +89,7 @@ void code(int h,char filename[]) {
 				if (wh == 0) {
 					Clear
 					printf("\033[1;31m错误[Error]: %s :循环内没有做任何有意义的动作\a\033[0m\n",filename);
-					Input();
+					getch();
 					fclose(fp);
 					return;
 				}
@@ -99,12 +99,12 @@ void code(int h,char filename[]) {
 				if(fp2) {
 					fprintf(fp2,"%c",ram[i]);
 				}
-				KbhitNoTime();
+				kbhitGetchar();
 				if (ram[i] == 0x0A || ram[i] == 0x0C || ram[i] == 0x0D || ram[i] == 0x1D) {
 					enter++;
 					if (enter > 14) {
 						printf("\033[2;16H");
-						KbhitNoTime();
+						kbhitGetchar();
 						enter = 0;
 					}
 					ch = 0;
@@ -112,18 +112,18 @@ void code(int h,char filename[]) {
 				else if (ram[i] == 0x08) {
 					ch--;
 					if (ch > 0) {
-						KbhitNoTime();
+						kbhitGetchar();
 					}
 					else {
 						if (enter > 0) {
 							printf("\n\033[2A\033[74C");
-							KbhitNoTime();
+							kbhitGetchar();
 							ch = 58;
 							enter--;
 						}
 						else {
 							printf("\033[2;16H");
-							KbhitNoTime();
+							kbhitGetchar();
 							ch = 0;
 						}
 					}
@@ -139,12 +139,12 @@ void code(int h,char filename[]) {
 						ch = 0;
 						if (enter > 14) {
 							printf("\033[2;16H");
-							KbhitNoTime();
+							kbhitGetchar();
 							enter = 0;
 						}
 						else {
 							printf("\n\033[15C");
-							KbhitNoTime();
+							kbhitGetchar();
 							enter++;
 						}
 					}
@@ -153,13 +153,13 @@ void code(int h,char filename[]) {
 					enter++;
 					if (enter > 14) {
 						printf("\033[15A");
-						KbhitNoTime();
+						kbhitGetchar();
 						enter = 0;
 					}
 				}
 				else {
 					if (ram[i] < 0x08 || ram[i] == 0x7F || ( ram[i] > 0x0E && ram[i] < 0x1F)) {
-						KbhitNoTime();
+						kbhitGetchar();
 					}
 					else {
 						ch++;
@@ -168,19 +168,19 @@ void code(int h,char filename[]) {
 						ch = 0;
 						if (enter > 14) {
 							printf("\033[2;16H");
-							KbhitNoTime();
+							kbhitGetchar();
 							enter = 0;
 						}
 						else {
 							printf("\n\033[15C");
-							KbhitNoTime();
+							kbhitGetchar();
 							enter++;
 						}
 					}
 				}
 				break;
 			case 0x2C:
-				ram[i] = Input();
+				ram[i] = getch();
 				wh++;
 				break;
 			case 0x3C:
@@ -226,7 +226,7 @@ void code(int h,char filename[]) {
 			default:
 				break;
 		}
-		if (KbhitHas() == 1) {
+		if (kbhit() == 1) {
 			getchar();
 			Clear
 			fclose(fp2);
@@ -235,7 +235,7 @@ void code(int h,char filename[]) {
 		}
 	}
 	printf("\033[1;31m\n\033[16C程序结束\n\033[16C按下任意键继续\033[0m");
-	Input();
+	getch();
 	Clear
 	fclose(fp);
 	if (fp2) {
