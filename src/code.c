@@ -1,18 +1,19 @@
 #include "../include/head.h"
 
 void code(int h,char filename[]) {
-	struct InputStruct * pHead = NULL, * pTemp = NULL;
+	struct InputStruct * pHead = NULL, * pTemp = NULL;      //用于输入的链表结构体
 
 	long w[500];
 	int a = 0;
 	short ch = 0;
 	unsigned short i = 0;
 	unsigned short w1 = 0,q = 1,enter = 0;
-	unsigned short ram[500];
+	unsigned short ram[500];                               //用于存储内存数据
 	char wh = 0;
 
 	FILE * fp,* fp2;
 
+	//创建输入缓存
 	mkdir("Brain-Fuck", 0744);
 	if (h == 0) {
 		pHead = pTemp = New();
@@ -31,6 +32,7 @@ void code(int h,char filename[]) {
 		fclose(fp);
 		Clear2
 	}
+	//打开文件
 	fp = fopen(filename,"rb");
 	if (!fp) {
 		printf("\033[1;31m错误[Error]: %s: 没有那个文件或目录\a\033[0m\n",filename);
@@ -49,7 +51,7 @@ void code(int h,char filename[]) {
 		printf("\033[1;31m错误[Error]: 当前目录无法创建文件，无法记录输出\a\033[0m\n");
 		getch();
 	}
-	miss(ram,i);
+	miss(ram,i);                                         //用于显示执行界面
 	printf("\033[3;16H");
 	kbhitGetchar();
 	while (a != EOF) {

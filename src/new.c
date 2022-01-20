@@ -1,4 +1,5 @@
 #include "../include/head.h"
+#include <stdio.h>
 
 struct InputStruct * New() {
 	struct InputStruct * pHead = NULL;
@@ -11,6 +12,7 @@ struct InputStruct * New() {
 	pHead -> pNext = NULL;
 	pHead -> m = 0x00;
 
+	printf("\033[?25h请输入：\n");
 	do {
 		if (pEnd -> m != 0) {
 			pNew = (struct InputStruct *)malloc(sizeof(struct InputStruct));
@@ -18,10 +20,15 @@ struct InputStruct * New() {
 			pEnd -> pNext = NULL;
 		}
 		pNew -> m = getch();
-		printf("%c",pNew -> m);
-		if (pNew -> m == 0x1B) {
-			free(pNew);
-			exit = 0;
+		if (pNew -> m == 0x0D) {
+			printf("\n");
+		}
+		else if (pNew -> m == 0x1B) {
+			if (kbhit() == 0) {
+				free(pNew);
+				printf("\033[?25l\n");
+				exit = 0;
+			}
 		}
 		else if (pNew -> m == 0x7F) {
 			free(pNew);
@@ -54,6 +61,7 @@ struct InputStruct * New() {
 			pNew = NULL;
 		}
 		else {
+			printf("%c",pNew -> m);
 			pEnd -> pNext = pNew;
 			pEnd = pNew;
 		}
