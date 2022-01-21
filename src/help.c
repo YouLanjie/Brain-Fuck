@@ -1,5 +1,7 @@
 #include "../include/head.h"
 
+#define MaxPage 4
+
 void help() {
 	char a = 0x00;
 	char b = 1;
@@ -27,7 +29,10 @@ void help() {
 			printf("\033[8;%dH8.执行程序时同时会保存输出", startSize);
 			printf("\033[9;%dH9.不要将窗口缩小到比程序界面还要小", startSize);
 		}
-		Menu("帮助",b,3);
+		else if (b == 4) {
+			printf("\033[7;%dH7.输入执行代码时先回车再输入还可以显示内存条\033[8;%dH  的状态、数值，方便调试程序", startSize, startSize);
+		}
+		Menu("帮助",b,MaxPage);
 		printf("\033[20D                    ");
 		Menu2("帮助");
 		a = getch();
@@ -44,7 +49,7 @@ void help() {
 					}
 				}
 				else if (a == 0x42 || a == 0x43) {
-					if (b < 3) {
+					if (b < MaxPage) {
 						b++;
 					}
 					else {
@@ -64,3 +69,6 @@ void help() {
 	Clear
 	return;
 }
+
+#undef MaxPage
+

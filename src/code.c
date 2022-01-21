@@ -5,11 +5,11 @@ void code(int h,char filename[]) {
 
 	long w[500];
 	int a = 0;
-	short ch = 0;
-	unsigned short i = 0;
-	unsigned short w1 = 0,q = 1,enter = 0;
+	short status = 0;
+	unsigned short i = 0, w1 = 0,q = 1;
 	unsigned short ram[500];                               //用于存储内存数据
 	char wh = 0;
+	void (*pfunction)(unsigned short *,unsigned short);
 
 	FILE * fp,* fp2;
 
@@ -51,9 +51,18 @@ void code(int h,char filename[]) {
 		printf("\033[1;31m错误[Error]: 当前目录无法创建文件，无法记录输出\a\033[0m\n");
 		getch();
 	}
-	miss(ram,i);                                         //用于显示执行界面
 	printf("\033[3;16H");
 	kbhitGetchar();
+	if (a != EOF) {
+		a = fgetc(fp);
+		if (a == 0x0D) {
+			status = 1;
+			pfunction = miss;
+		}
+		else {
+			pfunction = pass;
+		}
+	}
 	while (a != EOF) {
 		a = fgetc(fp);
 		if (a == 0x5D && q == 0) {
@@ -64,7 +73,7 @@ void code(int h,char filename[]) {
 			continue;
 		}
 		switch (a) {
-			case 0x5B:
+			case 0x5B:        //"["循环开始
 				if (ram[i] != 0) {
 					w[w1] = ftell(fp) - 1L;
 					w1++;
@@ -74,7 +83,7 @@ void code(int h,char filename[]) {
 					q = 0;
 				}
 				break;
-			case 0x5D:
+			case 0x5D:         //"]"循环结束
 				q = 1;
 				if (w1 == 0) {
 					Clear
@@ -96,96 +105,21 @@ void code(int h,char filename[]) {
 					return;
 				}
 				break;
-			case 0x2E:
+			case 0x2E:         //"."显示
 				printf("%c",ram[i]);
-				if(fp2) {
+				if(fp2) {      //将输出记录到文件里面
 					fprintf(fp2,"%c",ram[i]);
 				}
+				kbhitGetchar(); //将缓存区的内容写入到文件里
+				printbroid(status,ram,i);
 				kbhitGetchar();
-				if (ram[i] == 0x0A || ram[i] == 0x0C || ram[i] == 0x0D || ram[i] == 0x1D) {
-					enter++;
-					if (enter > 14) {
-						printf("\033[2;16H");
-						kbhitGetchar();
-						enter = 0;
-					}
-					ch = 0;
-				}
-				else if (ram[i] == 0x08) {
-					ch--;
-					if (ch > 0) {
-						kbhitGetchar();
-					}
-					else {
-						if (enter > 0) {
-							printf("\n\033[2A\033[74C");
-							kbhitGetchar();
-							ch = 58;
-							enter--;
-						}
-						else {
-							printf("\033[2;16H");
-							kbhitGetchar();
-							ch = 0;
-						}
-					}
-				}
-				else if (ram[i] == 0x09) {
-					if (ch == 0) {
-						ch++;
-					}
-					else {
-						ch += 8;
-					}
-					if (ch > 58) {
-						ch = 0;
-						if (enter > 14) {
-							printf("\033[2;16H");
-							kbhitGetchar();
-							enter = 0;
-						}
-						else {
-							printf("\n\033[15C");
-							kbhitGetchar();
-							enter++;
-						}
-					}
-				}
-				else if (ram[i] == 0x0B) {
-					enter++;
-					if (enter > 14) {
-						printf("\033[15A");
-						kbhitGetchar();
-						enter = 0;
-					}
-				}
-				else {
-					if (ram[i] < 0x08 || ram[i] == 0x7F || ( ram[i] > 0x0E && ram[i] < 0x1F)) {
-						kbhitGetchar();
-					}
-					else {
-						ch++;
-					}
-					if (ch > 58) {
-						ch = 0;
-						if (enter > 14) {
-							printf("\033[2;16H");
-							kbhitGetchar();
-							enter = 0;
-						}
-						else {
-							printf("\n\033[15C");
-							kbhitGetchar();
-							enter++;
-						}
-					}
-				}
 				break;
-			case 0x2C:
+			case 0x2C:           //","输入
 				ram[i] = getch();
 				wh++;
+				pfunction(ram,i);
 				break;
-			case 0x3C:
+			case 0x3C:           //"<"左移
 				if (i == 0) {
 					i = 499;
 				}
@@ -193,9 +127,9 @@ void code(int h,char filename[]) {
 					i--;
 				}
 				wh++;
-				miss(ram,i);
+				pfunction(ram,i);
 				break;
-			case 0x3E:
+			case 0x3E:           //">"右移
 				if (i == 499) {
 					i = 0;
 				}
@@ -203,9 +137,9 @@ void code(int h,char filename[]) {
 					i++;
 				}
 				wh++;
-				miss(ram,i);
+				pfunction(ram,i);
 				break;
-			case 0x2D:
+			case 0x2D:           //"-"减
 				if (ram[i] == 0) {
 					ram[i] = 259;
 				}
@@ -213,9 +147,9 @@ void code(int h,char filename[]) {
 					ram[i]--;
 				}
 				wh++;
-				miss(ram,i);
+				pfunction(ram,i);
 				break;
-			case 0x2B:
+			case 0x2B:            //"+"加
 				if (ram[i] == 259) {
 					ram[i] = 0;
 				}
@@ -223,9 +157,9 @@ void code(int h,char filename[]) {
 					ram[i]++;
 				}
 				wh++;
-				miss(ram,i);
+				pfunction(ram,i);
 				break;
-			default:
+			default:              //其他跳过
 				break;
 		}
 		if (kbhit() == 1) {
@@ -243,6 +177,102 @@ void code(int h,char filename[]) {
 	if (fp2) {
 		fclose(fp2);
 	}
+	return;
+}
+
+void printbroid(const int status,unsigned short ram[500],unsigned short i) {
+	static short ch = 0;
+	static unsigned short enter = 0;
+
+	if (status == 1) {
+		if (ram[i] == 0x0A || ram[i] == 0x0C || ram[i] == 0x0D || ram[i] == 0x1D) {   //记录回车数值
+			enter++;
+			if (enter > 14) {
+				printf("\033[2;16H");  //移动光标位置（坐标）
+				kbhitGetchar();
+				enter = 0;
+			}
+			ch = 0;  //单列字符数清零
+		}
+		else if (ram[i] == 0x08) {  //退格
+			ch--;
+			if (ch > 0) {
+				kbhitGetchar();
+			}
+			else {
+				if (enter > 0) {
+					printf("\n\033[2A\033[74C");
+					kbhitGetchar();
+					ch = 58;
+					enter--;
+				}
+				else {
+					printf("\033[2;16H");
+					kbhitGetchar();
+					ch = 0;
+				}
+			}
+		}
+		else if (ram[i] == 0x09) {
+			if (ch == 0) {
+				ch++;
+			}
+			else {
+				ch += 8;
+			}
+			if (ch > 58) {
+				ch = 0;
+				if (enter > 14) {
+					printf("\033[2;16H");
+					kbhitGetchar();
+					enter = 0;
+				}
+				else {
+					printf("\n\033[15C");
+					kbhitGetchar();
+					enter++;
+				}
+			}
+		}
+		else if (ram[i] == 0x0B) {
+			enter++;
+			if (enter > 14) {
+				printf("\033[15A");
+				kbhitGetchar();
+				enter = 0;
+			}
+		}
+		else {
+			if (ram[i] < 0x08 || ram[i] == 0x7F || ( ram[i] > 0x0E && ram[i] < 0x1F)) {
+				kbhitGetchar();
+			}
+			else {
+				ch++;
+			}
+			if (ch > 58) {
+				ch = 0;
+				if (enter > 14) {
+					printf("\033[2;16H");
+					kbhitGetchar();
+					enter = 0;
+				}
+				else {
+					printf("\n\033[15C");
+					kbhitGetchar();
+					enter++;
+				}
+			}
+		}
+	}
+	else {
+		printf("%c",ram[i]);
+		kbhitGetchar();
+	}
+	return;
+}
+
+void pass(unsigned short ram[500],unsigned short i) {          //用于占位，不作用
+	ram[i] = 0;
 	return;
 }
 
