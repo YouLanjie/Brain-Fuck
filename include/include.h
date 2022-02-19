@@ -27,15 +27,14 @@
 #endif
 
 /* kbhit */
-#ifdef __linux
-int getch();
-int kbhit();
-int kbhitGetchar();
-#endif
+int Kbhit();
+int Input();
+int KbhitHas();
+int KbhitNoTime();
 
 /* menu */
-void Menu(char title[50], short p, short a);
-void Menu2(char title[50]);
+void Menu(char title[], short p, short a);
+void Menu2(char title[]);
 
 /* pid */
 /* #include <sys/types.h> */
