@@ -2,8 +2,8 @@
 
 CC = gcc
 BIN = ./bin
-SRC = $(shell find ./src/ -name "*.c")
-incl = $(shell find ./include/ -name "*.h")
+SRC = $(shell find ./ -name "*.c")
+incl = $(shell find ./ -name "*.h")
 OBJ = $(SRC:%.c=%.o)
 prom = brain-fuck
 INDIR = /usr/local/$(prom)
@@ -21,7 +21,7 @@ $(prom): $(OBJ)
 	$(CC) -c $< -o $@
 
 clean:
-	@rm -rf $(OBJ) $(prom).deb
+	@rm -rf $(OBJ)
 
 install:
 	@sudo rm -rf $(INDIR)
