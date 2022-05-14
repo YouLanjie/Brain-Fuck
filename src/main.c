@@ -22,7 +22,7 @@ int main(int argc,char * argv[]) {
 	printf("\033[?25l");
 	while (input != 0x30) {
 		printf("\033[1;33m");
-		input = Menu("首页", text, 5);
+		input = Menu("首页", text, 5, 2);
 		m = 1;
 		printf("\n");
 		Clear2
