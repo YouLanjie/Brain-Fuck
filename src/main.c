@@ -1,10 +1,15 @@
 #include "../include/head.h"
 
 int main(int argc,char * argv[]) {
-	int i = 0;
+	int input = 0;
 	int m = 1;
-	struct winsize size;
-	int startSize = 0;
+	char *text[] = {
+		"1.执行代码",
+		"2.执行上一次",
+		"3.程序帮助",
+		"4.执行外部文件",
+		"9.删除临时文件",
+	};
 
 	if (argc != 1) {
 		for (int count = 1; count < argc; count++) {
@@ -15,23 +20,13 @@ int main(int argc,char * argv[]) {
 	}
 	Clear2
 	printf("\033[?25l");
-	while (i != 0x30) {
-		ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
-		startSize = size.ws_col / 2 - 20;
+	while (input != 0x30) {
 		printf("\033[1;33m");
-		if (m == 1) {
-			printf("\033[8;%dH0.退出程序\033[8;%dH1.执行代码", startSize, startSize + 32);
-			printf("\033[9;%dH2.执行上一次\033[9;%dH3.程序帮助", startSize, startSize + 32);
-		}
-		else if (m == 2) {
-			printf("\033[8;%dH4.执行外部文件\033[8;%dH9.删除临时文件", startSize, startSize + 32);
-		}
-		Menu("首页",m,2);
+		input = Menu("首页", text, 5);
 		m = 1;
-		i = getch();
 		printf("\n");
 		Clear2
-		switch (i) {
+		switch (input) {
 			case 0x30:
 			case 0x51:
 			case 0x71:
@@ -45,8 +40,8 @@ int main(int argc,char * argv[]) {
 			case 0x1B:
 				if (kbhit() == 1) {
 					getchar();
-					i = getchar();
-					if (i == 0x41 || i == 0x44) {
+					input = getchar();
+					if (input == 0x41 || input == 0x44) {
 						if (m > 1) {
 							m--;
 						}
@@ -54,7 +49,7 @@ int main(int argc,char * argv[]) {
 							printf("\a");
 						}
 					}
-					else if (i == 0x42 || i == 0x43) {
+					else if (input == 0x42 || input == 0x43) {
 						if (m < 2) {
 							m++;
 						}

@@ -32,9 +32,7 @@ void help() {
 		else if (b == 4) {
 			printf("\033[7;%dH7.输入执行代码时先回车再输入还可以显示内存条\033[8;%dH  的状态、数值，方便调试程序", startSize, startSize);
 		}
-		Menu("帮助",b,MaxPage);
-		printf("\033[20D                    ");
-		Menu2("帮助");
+		Menu2("帮助",b,MaxPage);
 		a = getch();
 		if (a == 0x1B) {
 			if (kbhit() == 1) {

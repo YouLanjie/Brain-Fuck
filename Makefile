@@ -18,7 +18,7 @@ $(prom): $(OBJ)
 	@mv $(prom) $(BIN)/main
 
 %.o: %.c $(incl)
-	$(CC) -c $< -o $@
+	$(CC) -g -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ)

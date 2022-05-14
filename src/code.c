@@ -9,7 +9,6 @@ void code(int h,char filename[]) {
 	unsigned short i = 0, w1 = 0,q = 1;
 	unsigned short ram[500];                               //用于存储内存数据
 	char wh = 0;
-	void (*pfunction)(unsigned short *,unsigned short);
 
 	FILE * fp,* fp2;
 
@@ -55,13 +54,10 @@ void code(int h,char filename[]) {
 	kbhitGetchar();
 	if (a != EOF) {
 		a = fgetc(fp);
-		if (a == 0x0D) {
+		if (a == 0x0D) { //即回车键
 			status = 1;
-			pfunction = miss;
 		}
-		else {
-			pfunction = pass;
-		}
+		fseek(fp, 0L, 0);
 	}
 	while (a != EOF) {
 		a = fgetc(fp);
@@ -111,13 +107,13 @@ void code(int h,char filename[]) {
 					fprintf(fp2,"%c",ram[i]);
 				}
 				kbhitGetchar(); //将缓存区的内容写入到文件里
-				printbroid(status,ram,i);
+				miss(ram, i, (int*)&status);
 				kbhitGetchar();
 				break;
 			case 0x2C:           //","输入
 				ram[i] = getch();
 				wh++;
-				pfunction(ram,i);
+				miss(ram,i,(int*)&status);
 				break;
 			case 0x3C:           //"<"左移
 				if (i == 0) {
@@ -127,7 +123,7 @@ void code(int h,char filename[]) {
 					i--;
 				}
 				wh++;
-				pfunction(ram,i);
+				miss(ram,i,(int*)&status);
 				break;
 			case 0x3E:           //">"右移
 				if (i == 499) {
@@ -137,7 +133,7 @@ void code(int h,char filename[]) {
 					i++;
 				}
 				wh++;
-				pfunction(ram,i);
+				miss(ram,i,(int*)&status);
 				break;
 			case 0x2D:           //"-"减
 				if (ram[i] == 0) {
@@ -147,7 +143,7 @@ void code(int h,char filename[]) {
 					ram[i]--;
 				}
 				wh++;
-				pfunction(ram,i);
+				miss(ram,i,(int*)&status);
 				break;
 			case 0x2B:            //"+"加
 				if (ram[i] == 259) {
@@ -157,7 +153,7 @@ void code(int h,char filename[]) {
 					ram[i]++;
 				}
 				wh++;
-				pfunction(ram,i);
+				miss(ram,i,(int*)&status);
 				break;
 			default:              //其他跳过
 				break;
@@ -268,11 +264,6 @@ void printbroid(const int status,unsigned short ram[500],unsigned short i) {
 		printf("%c",ram[i]);
 		kbhitGetchar();
 	}
-	return;
-}
-
-void pass(unsigned short ram[500],unsigned short i) {          //用于占位，不作用
-	ram[i] = 0;
 	return;
 }
 

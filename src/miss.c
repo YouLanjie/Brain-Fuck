@@ -1,6 +1,9 @@
 #include "../include/head.h"
 
-void miss(unsigned short ram[500],unsigned short i) {          //用于显示界面
+void miss(unsigned short ram[500],unsigned short i, int *status) {          //用于显示界面
+	if (*status != 1) {
+		return;
+	}
 	printf("\033[s\033[1;1H");
 	kbhitGetchar();                                        //使输出起效果
 	printf("\033[1;1H\033[34m---------------\033[33m--------------------------------------------------------------\033[0m\n");
