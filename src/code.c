@@ -54,7 +54,7 @@ void code(int h,char filename[]) {
 	kbhitGetchar();
 	if (a != EOF) {
 		a = fgetc(fp);
-		if (a == 0x0D) { //即回车键
+		if (a == 0x0D || a == 0x0A) { //即回车与换行键
 			status = 1;
 		}
 		fseek(fp, 0L, 0);
@@ -166,7 +166,12 @@ void code(int h,char filename[]) {
 			return;
 		}
 	}
-	printf("\033[1;31m\n\033[16C程序结束\n\033[16C按下任意键继续\033[0m");
+	if (status == 1) {
+		printf("\033[1;31m\n\033[16C程序结束\n\033[16C按下任意键继续\033[0m");
+	}
+	else {
+		printf("\033[1;31m\n程序结束\n按下任意键继续\033[0m\n");
+	}
 	getch();
 	Clear
 	fclose(fp);
