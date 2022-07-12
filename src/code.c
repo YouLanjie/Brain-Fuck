@@ -6,7 +6,7 @@ void code(int h,char filename[]) {
 	long w[500];
 	int a = 0;
 	short status = 0;
-	unsigned short i = 0, w1 = 0,q = 1;
+	unsigned short i = 0, w1 = 0,q = 1;          /* i用作表示模拟的指针所指的内存序号 */
 	unsigned short ram[500];                               //用于存储内存数据
 	char wh = 0;
 
@@ -177,97 +177,6 @@ void code(int h,char filename[]) {
 	fclose(fp);
 	if (fp2) {
 		fclose(fp2);
-	}
-	return;
-}
-
-void printbroid(const int status,unsigned short ram[500],unsigned short i) {
-	static short ch = 0;
-	static unsigned short enter = 0;
-
-	if (status == 1) {
-		if (ram[i] == 0x0A || ram[i] == 0x0C || ram[i] == 0x0D || ram[i] == 0x1D) {   //记录回车数值
-			enter++;
-			if (enter > 14) {
-				printf("\033[2;16H");  //移动光标位置（坐标）
-				kbhitGetchar();
-				enter = 0;
-			}
-			ch = 0;  //单列字符数清零
-		}
-		else if (ram[i] == 0x08) {  //退格
-			ch--;
-			if (ch > 0) {
-				kbhitGetchar();
-			}
-			else {
-				if (enter > 0) {
-					printf("\n\033[2A\033[74C");
-					kbhitGetchar();
-					ch = 58;
-					enter--;
-				}
-				else {
-					printf("\033[2;16H");
-					kbhitGetchar();
-					ch = 0;
-				}
-			}
-		}
-		else if (ram[i] == 0x09) {
-			if (ch == 0) {
-				ch++;
-			}
-			else {
-				ch += 8;
-			}
-			if (ch > 58) {
-				ch = 0;
-				if (enter > 14) {
-					printf("\033[2;16H");
-					kbhitGetchar();
-					enter = 0;
-				}
-				else {
-					printf("\n\033[15C");
-					kbhitGetchar();
-					enter++;
-				}
-			}
-		}
-		else if (ram[i] == 0x0B) {
-			enter++;
-			if (enter > 14) {
-				printf("\033[15A");
-				kbhitGetchar();
-				enter = 0;
-			}
-		}
-		else {
-			if (ram[i] < 0x08 || ram[i] == 0x7F || ( ram[i] > 0x0E && ram[i] < 0x1F)) {
-				kbhitGetchar();
-			}
-			else {
-				ch++;
-			}
-			if (ch > 58) {
-				ch = 0;
-				if (enter > 14) {
-					printf("\033[2;16H");
-					kbhitGetchar();
-					enter = 0;
-				}
-				else {
-					printf("\n\033[15C");
-					kbhitGetchar();
-					enter++;
-				}
-			}
-		}
-	}
-	else {
-		printf("%c",ram[i]);
-		kbhitGetchar();
 	}
 	return;
 }

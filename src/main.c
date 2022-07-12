@@ -7,8 +7,8 @@ int main(int argc,char * argv[]) {
 		"1.执行代码",
 		"2.执行上一次",
 		"3.程序帮助",
-		"4.执行外部文件",
-		"9.删除临时文件",
+		"4.删除临时文件",
+		"0.退出",
 	};
 
 	if (argc != 1) {
@@ -30,6 +30,7 @@ int main(int argc,char * argv[]) {
 			case 0x30:
 			case 0x51:
 			case 0x71:
+			case 0x35:
 				remove("./Brain-Fuck/input.txt");
 				remove("./Brain-Fuck/output.txt");
 				rmdir("./Brain-Fuck");
@@ -74,7 +75,7 @@ int main(int argc,char * argv[]) {
 			case 0x33:
 				help();
 				break;
-			case 0x39:
+			case 0x34:
 				remove("./Brain-Fuck/input.txt");
 				remove("./Brain-Fuck/output.txt");
 				rmdir("./Brain-Fuck");

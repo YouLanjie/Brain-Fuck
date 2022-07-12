@@ -27,9 +27,6 @@ brainfuck [文件]...
     gcc *.c */*.c -o main
     ```
 
-- 安装程序（非必要操作）
+- 安装程序（非必要操作） Archlinux在AUR上安装**brain-fuck**软件包即可
   
-  ```sh
-  make && make install
-  ```
 
