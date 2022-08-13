@@ -1,4 +1,4 @@
-#include "include.h"                         //头文件
+#include "tools.h"                         //头文件
 
 struct InputStruct {
         int m;

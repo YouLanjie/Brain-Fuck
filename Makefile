@@ -13,12 +13,12 @@ all: $(prom)
 
 $(prom): $(OBJ)
 	@rm -rf $(BIN)
-	$(CC) -z now $(OBJ) -o $(prom)
+	$(CC) -z now $(OBJ) -L lib -ltools -o $(prom)
 	@mkdir bin
 	@mv $(prom) $(BIN)/main
 
 %.o: %.c $(incl)
-	$(CC) -g -c $< -o $@
+	$(CC) -g -Wall -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ)
