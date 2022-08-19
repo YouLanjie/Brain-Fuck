@@ -1,9 +1,8 @@
 #include "../include/head.h"
 
 void help() {
-	menuData help;
+	menuData help = menuDataInit();
 
-	menuDataInit(&help);
 	help.title = "首页";
 	help.cfg   = 2;
 	help.addText(&help,

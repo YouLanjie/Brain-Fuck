@@ -13,7 +13,7 @@ all: $(prom)
 
 $(prom): $(OBJ)
 	@rm -rf $(BIN)
-	$(CC) -z now $(OBJ) -L lib -ltools -o $(prom)
+	$(CC) -z now $(OBJ) -lncurses -L lib -ltools -o $(prom)
 	@mkdir bin
 	@mv $(prom) $(BIN)/main
 

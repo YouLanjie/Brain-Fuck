@@ -1,5 +1,4 @@
 #include "../include/head.h"
-#include <stdio.h>
 
 struct InputStruct * New() {
 	struct InputStruct * pHead = NULL;
@@ -12,7 +11,9 @@ struct InputStruct * New() {
 	pHead -> pNext = NULL;
 	pHead -> m = 0x00;
 
-	printf("\033[?25h请输入：\n");
+	curs_set(2);
+	clear();
+	printw("请输入：\n");
 	do {
 		if (pEnd -> m != 0) {
 			pNew = (struct InputStruct *)malloc(sizeof(struct InputStruct));
@@ -21,12 +22,11 @@ struct InputStruct * New() {
 		}
 		pNew -> m = getch();
 		if (pNew -> m == 0x0D) {
-			printf("\n");
+			printw("\n");
 		}
 		else if (pNew -> m == 0x1B) {
 			if (kbhit() == 0) {
 				free(pNew);
-				printf("\033[?25l\n");
 				exit = 0;
 			}
 		}
@@ -39,18 +39,18 @@ struct InputStruct * New() {
 				pEnd = pNew = pHead = (struct InputStruct *)malloc(sizeof(struct InputStruct));
 				pHead -> pNext = NULL;
 				pHead -> m = 0x00;
-				printf("\n");
+				printw("\n");
 				Clear
-				printf("请输入：\n");
+				printw("请输入：\n");
 				continue;
 			}
 			free(pEnd);
-			printf("\n");
+			printw("\n");
 			Clear
-			printf("请输入：\n");
+			printw("请输入：\n");
 			pTemp = pHead;
 			while (pTemp -> pNext != NULL) {
-				printf("%c",pTemp -> m);
+				printw("%c",pTemp -> m);
 				if (pTemp -> pNext == pEnd) {
 					pTemp -> pNext = NULL;
 					pEnd = pTemp;
@@ -61,12 +61,15 @@ struct InputStruct * New() {
 			pNew = NULL;
 		}
 		else {
-			printf("%c",pNew -> m);
+			printw("%c",pNew -> m);
 			pEnd -> pNext = pNew;
 			pEnd = pNew;
 		}
 	}while (exit);
-	printf("\n");
+	curs_set(0);
 	Clear
+	if (pEnd == pHead) {
+		pHead = NULL;
+	}
 	return pHead;
 }

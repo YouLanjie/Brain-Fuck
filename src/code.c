@@ -1,4 +1,5 @@
 #include "../include/head.h"
+#include <curses.h>
 
 void code(int h,char filename[]) {
 	struct InputStruct * pHead = NULL, * pTemp = NULL;      //用于输入的链表结构体
@@ -16,6 +17,9 @@ void code(int h,char filename[]) {
 	mkdir("Brain-Fuck", 0744);
 	if (h == 0) {
 		pHead = pTemp = New();
+		if (pHead == NULL) {
+			return;
+		}
 		fp = fopen(filename, "w");
 		if(!fp) {
 			perror("\033[1;31m[Code]\033[0m");
@@ -29,12 +33,12 @@ void code(int h,char filename[]) {
 		free(pHead);
 		pHead = NULL;
 		fclose(fp);
-		Clear2
 	}
+	attron(COLOR_PAIR(3));
 	//打开文件
 	fp = fopen(filename,"rb");
 	if (!fp) {
-		printf("\033[1;31m错误[Error]: %s: 没有那个文件或目录\a\033[0m\n",filename);
+		printw("错误[Error]: %s: 没有那个文件或目录\a",filename);
 		getch();
 		return;
 	}
@@ -47,11 +51,11 @@ void code(int h,char filename[]) {
 	i = 0;
 	fp2 = fopen("./Brain-Fuck/output.txt","wb");
 	if (!fp2) {
-		printf("\033[1;31m错误[Error]: 当前目录无法创建文件，无法记录输出\a\033[0m\n");
+		printw("错误[Error]: 当前目录无法创建文件，无法记录输出\a\n");
 		getch();
 	}
-	printf("\033[3;16H");
-	kbhitGetchar();
+	attroff(COLOR_PAIR(3));
+	move(2, 15);
 	if (a != EOF) {
 		a = fgetc(fp);
 		if (a == 0x0D || a == 0x0A) { //即回车与换行键
@@ -59,6 +63,7 @@ void code(int h,char filename[]) {
 		}
 		fseek(fp, 0L, 0);
 	}
+	move(0, 0);
 	while (a != EOF) {
 		a = fgetc(fp);
 		if (a == 0x5D && q == 0) {
@@ -83,9 +88,13 @@ void code(int h,char filename[]) {
 				q = 1;
 				if (w1 == 0) {
 					Clear
-					printf("\033[1;31m错误[Error]: %s: 循环括号不匹配\a\033[0m\n",filename);
+					attron(COLOR_PAIR(3));
+					printw("错误[Error]: %s: 循环括号不匹配\a",filename);
+					attroff(COLOR_PAIR(3));
 					getch();
-					fclose(fp);
+					if (fp) {
+						fclose(fp);
+					}
 					return;
 					break;
 				}
@@ -95,14 +104,19 @@ void code(int h,char filename[]) {
 				fseek(fp,w[w1],0);
 				if (wh == 0) {
 					Clear
-					printf("\033[1;31m错误[Error]: %s :循环内没有做任何有意义的动作\a\033[0m\n",filename);
+					attron(COLOR_PAIR(3));
+					printw("错误[Error]: %s :循环内没有做任何有意义的动作\a",filename);
+					attroff(COLOR_PAIR(3));
 					getch();
-					fclose(fp);
+					if (fp) {
+						fclose(fp);
+					}
 					return;
 				}
 				break;
 			case 0x2E:         //"."显示
-				printf("%c",ram[i]);
+				printw("%c",ram[i]);
+				refresh();
 				if(fp2) {      //将输出记录到文件里面
 					fprintf(fp2,"%c",ram[i]);
 				}
@@ -160,20 +174,22 @@ void code(int h,char filename[]) {
 		}
 		if (kbhit() == 1) {
 			getchar();
-			Clear
 			fclose(fp2);
 			fclose(fp);
+			clear();
 			return;
 		}
 	}
+	attron(COLOR_PAIR(3));
 	if (status == 1) {
-		printf("\033[1;31m\n\033[16C程序结束\n\033[16C按下任意键继续\033[0m");
+		printw("\n\033[16C程序结束\n\033[16C按下任意键继续");
 	}
 	else {
-		printf("\033[1;31m\n程序结束\n按下任意键继续\033[0m\n");
+		printw("\n程序结束\n按下任意键继续\n");
 	}
+	attroff(COLOR_PAIR(3));
 	getch();
-	Clear
+	clear();
 	fclose(fp);
 	if (fp2) {
 		fclose(fp2);
