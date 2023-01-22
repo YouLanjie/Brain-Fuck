@@ -1,0 +1,23 @@
+#+title: Brain Fuck
+#+author: youlanjie
+#+date: 2023-01-22 15:26:25
+
+这是一个由c语言编写的Brain Fuck解释器
+
+* BUG
+本程序由于更新问题，bug较多，建议使用程序之前的版本
+
+* 命令行格式
+
+#+BEGIN_SRC shell
+  brain-fuck [filename ...]
+#+END_SRC
+
+- 没有参数，可以执行多个文件
+- 若不指定文件则进入程序菜单
+  
+* 编译
+在根目录下执行
+#+BEGIN_SRC shell
+  make
+#+END_SRC

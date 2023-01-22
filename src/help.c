@@ -1,11 +1,13 @@
 #include "../include/head.h"
 
 void help() {
-	menuData help = menuDataInit();
+	ctools_menu_t * help = NULL;
 
-	help.title = "首页";
-	help.cfg   = 2;
-	help.addText(&help,
+	ctools_menu_t_init(&help);
+
+	help->title = "首页";
+	help->cfg   = ctools_menu_Type_Help;
+	ctools_menu_AddText(help,
 			"1.%z↑上翻，↓下翻%z",
 			"2.%z输入代码时按下%zEsc%z退出%z",
 			"3.%z存储条只有%z500%z个%z",
@@ -18,9 +20,7 @@ void help() {
 			"7.%z输入执行代码时先回车再输入还可以显示内存条的状态、数值，方便调试程序%z",
 			NULL);
 
-	Clear2
-	help.menuShow(&help);
-	Clear2
+	ctools_menu_Show(help);
 	return;
 }
 

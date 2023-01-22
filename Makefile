@@ -12,14 +12,12 @@ RESDIR = ./res
 all: $(prom)
 
 $(prom): $(OBJ)
-	@rm -rf $(BIN)
-	$(CC) -z now $(OBJ) -lncurses -L lib -ltools -o $(prom)
-	@mkdir bin
-	@mv $(prom) $(BIN)/main
+	@if [ ! -d "$(BIN)" ]; then mkdir $(BIN); fi
+	$(CC) -z now $(OBJ) -lncurses -L lib -ltools -o $(BIN)/$(prom)
 
 %.o: %.c $(incl)
 	$(CC) -g -Wall -c $< -o $@
 
 clean:
-	@rm -rf $(OBJ)
+	@rm -rf $(OBJ) $(BIN)
 

@@ -1,5 +1,4 @@
 #include "../include/head.h"
-#include <curses.h>
 
 void code(int h,char filename[]) {
 	struct InputStruct * pHead = NULL, * pTemp = NULL;      //用于输入的链表结构体
@@ -38,7 +37,7 @@ void code(int h,char filename[]) {
 	//打开文件
 	fp = fopen(filename,"rb");
 	if (!fp) {
-		printw("错误[Error]: %s: 没有那个文件或目录\a",filename);
+		printw("错误[Error]: %s: 没有那个文件或目录",filename);
 		getch();
 		return;
 	}
@@ -87,7 +86,7 @@ void code(int h,char filename[]) {
 			case 0x5D:         //"]"循环结束
 				q = 1;
 				if (w1 == 0) {
-					Clear
+					Clear;
 					attron(COLOR_PAIR(3));
 					printw("错误[Error]: %s: 循环括号不匹配\a",filename);
 					attroff(COLOR_PAIR(3));
@@ -103,7 +102,7 @@ void code(int h,char filename[]) {
 				}
 				fseek(fp,w[w1],0);
 				if (wh == 0) {
-					Clear
+					Clear;
 					attron(COLOR_PAIR(3));
 					printw("错误[Error]: %s :循环内没有做任何有意义的动作\a",filename);
 					attroff(COLOR_PAIR(3));
@@ -120,14 +119,14 @@ void code(int h,char filename[]) {
 				if(fp2) {      //将输出记录到文件里面
 					fprintf(fp2,"%c",ram[i]);
 				}
-				kbhitGetchar(); //将缓存区的内容写入到文件里
-				miss(ram, i, (int*)&status);
-				kbhitGetchar();
+				ctools_kbhitGetchar(); //将缓存区的内容写入到文件里
+				msg(ram, i, (int*)&status);
+				ctools_kbhitGetchar();
 				break;
 			case 0x2C:           //","输入
 				ram[i] = getch();
 				wh++;
-				miss(ram,i,(int*)&status);
+				msg(ram,i,(int*)&status);
 				break;
 			case 0x3C:           //"<"左移
 				if (i == 0) {
@@ -137,7 +136,7 @@ void code(int h,char filename[]) {
 					i--;
 				}
 				wh++;
-				miss(ram,i,(int*)&status);
+				msg(ram,i,(int*)&status);
 				break;
 			case 0x3E:           //">"右移
 				if (i == 499) {
@@ -147,7 +146,7 @@ void code(int h,char filename[]) {
 					i++;
 				}
 				wh++;
-				miss(ram,i,(int*)&status);
+				msg(ram,i,(int*)&status);
 				break;
 			case 0x2D:           //"-"减
 				if (ram[i] == 0) {
@@ -157,7 +156,7 @@ void code(int h,char filename[]) {
 					ram[i]--;
 				}
 				wh++;
-				miss(ram,i,(int*)&status);
+				msg(ram,i,(int*)&status);
 				break;
 			case 0x2B:            //"+"加
 				if (ram[i] == 259) {
@@ -167,12 +166,12 @@ void code(int h,char filename[]) {
 					ram[i]++;
 				}
 				wh++;
-				miss(ram,i,(int*)&status);
+				msg(ram,i,(int*)&status);
 				break;
 			default:              //其他跳过
 				break;
 		}
-		if (kbhit() == 1) {
+		if (ctools_kbhit() == 1) {
 			getchar();
 			fclose(fp2);
 			fclose(fp);
@@ -188,6 +187,7 @@ void code(int h,char filename[]) {
 		printw("\n程序结束\n按下任意键继续\n");
 	}
 	attroff(COLOR_PAIR(3));
+	refresh();
 	getch();
 	clear();
 	fclose(fp);

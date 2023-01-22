@@ -25,7 +25,7 @@ struct InputStruct * New() {
 			printw("\n");
 		}
 		else if (pNew -> m == 0x1B) {
-			if (kbhit() == 0) {
+			if (ctools_kbhit() == 0) {
 				free(pNew);
 				exit = 0;
 			}
@@ -40,13 +40,13 @@ struct InputStruct * New() {
 				pHead -> pNext = NULL;
 				pHead -> m = 0x00;
 				printw("\n");
-				Clear
+				Clear;
 				printw("请输入：\n");
 				continue;
 			}
 			free(pEnd);
 			printw("\n");
-			Clear
+			Clear;
 			printw("请输入：\n");
 			pTemp = pHead;
 			while (pTemp -> pNext != NULL) {
@@ -67,7 +67,7 @@ struct InputStruct * New() {
 		}
 	}while (exit);
 	curs_set(0);
-	Clear
+	Clear;
 	if (pEnd == pHead) {
 		pHead = NULL;
 	}
