@@ -15,7 +15,7 @@ void code(int h,char filename[]) {
 	//创建输入缓存
 	mkdir("Brain-Fuck", 0744);
 	if (h == 0) {
-		pHead = pTemp = New();
+		pHead = pTemp = New();    /* 获取输入 */
 		if (pHead == NULL) {
 			return;
 		}
@@ -63,6 +63,8 @@ void code(int h,char filename[]) {
 		fseek(fp, 0L, 0);
 	}
 	move(0, 0);
+	def_prog_mode();
+	endwin();
 	while (a != EOF) {
 		a = fgetc(fp);
 		if (a == 0x5D && q == 0) {
@@ -86,7 +88,9 @@ void code(int h,char filename[]) {
 			case 0x5D:         //"]"循环结束
 				q = 1;
 				if (w1 == 0) {
-					Clear;
+					printf("Waring!循环括号不匹配\n");
+					reset_prog_mode();
+					clear();
 					attron(COLOR_PAIR(3));
 					printw("错误[Error]: %s: 循环括号不匹配\a",filename);
 					attroff(COLOR_PAIR(3));
@@ -102,7 +106,9 @@ void code(int h,char filename[]) {
 				}
 				fseek(fp,w[w1],0);
 				if (wh == 0) {
-					Clear;
+					printf("Waring!循环无法终止\n");
+					reset_prog_mode();
+					clear();
 					attron(COLOR_PAIR(3));
 					printw("错误[Error]: %s :循环内没有做任何有意义的动作\a",filename);
 					attroff(COLOR_PAIR(3));
@@ -114,7 +120,7 @@ void code(int h,char filename[]) {
 				}
 				break;
 			case 0x2E:         //"."显示
-				printw("%c",ram[i]);
+				printf("%c",ram[i]);
 				refresh();
 				if(fp2) {      //将输出记录到文件里面
 					fprintf(fp2,"%c",ram[i]);
@@ -175,25 +181,27 @@ void code(int h,char filename[]) {
 			getchar();
 			fclose(fp2);
 			fclose(fp);
+			reset_prog_mode();
 			clear();
 			return;
 		}
 	}
 	attron(COLOR_PAIR(3));
+	printf("\033[43;37m");
 	if (status == 1) {
-		printw("\n\033[16C程序结束\n\033[16C按下任意键继续");
+		printf("\n\033[16C程序结束\n\033[16C按下任意键继续");
 	}
 	else {
-		printw("\n程序结束\n按下任意键继续\n");
+		printf("\n程序结束\n按下任意键继续\n");
 	}
-	attroff(COLOR_PAIR(3));
-	refresh();
-	getch();
-	clear();
+	printf("\033[0m");
+	ctools_getch();
 	fclose(fp);
 	if (fp2) {
 		fclose(fp2);
 	}
+	reset_prog_mode();
+	clear();
 	return;
 }
 

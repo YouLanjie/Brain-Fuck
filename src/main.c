@@ -6,6 +6,13 @@ int main(int argc,char * argv[]) {
 	ctools_menu_t * data = NULL;
 
 	ctools_menu_Init();
+
+	init_pair(1, COLOR_WHITE, COLOR_BLUE);      /* 蓝底白字 */
+	init_pair(2, COLOR_BLUE, COLOR_WHITE);      /* 白底蓝字 */
+	init_pair(3, COLOR_WHITE, COLOR_YELLOW);    /* 黄底白字 */
+	init_pair(4, COLOR_BLACK, COLOR_WHITE);     /* 白底黑字 */
+	init_pair(5, COLOR_WHITE, COLOR_BLACK);     /* 黑底白字 */
+
 	ctools_menu_t_init(&data);
 	
 	data->title = "首页";
