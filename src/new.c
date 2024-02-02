@@ -40,13 +40,13 @@ struct InputStruct * New() {
 				pHead -> pNext = NULL;
 				pHead -> m = 0x00;
 				printw("\n");
-				Clear;
+				clear();
 				printw("请输入：\n");
 				continue;
 			}
 			free(pEnd);
 			printw("\n");
-			Clear;
+			clear();
 			printw("请输入：\n");
 			pTemp = pHead;
 			while (pTemp -> pNext != NULL) {
@@ -67,7 +67,7 @@ struct InputStruct * New() {
 		}
 	}while (exit);
 	curs_set(0);
-	Clear;
+	clear();
 	if (pEnd == pHead) {
 		pHead = NULL;
 	}
