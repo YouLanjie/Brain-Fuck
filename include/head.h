@@ -1,23 +1,20 @@
-#include "tools.h"                         //头文件
+#include "tools.h"		//头文件
 
 extern const ctools_menu CT_MENU;
 
 #define FILE_INPUT  "./Brain-Fuck/input.txt"
 #define FILE_OUTPUT "./Brain-Fuck/output.txt"
 
-struct InputStruct {
-        int m;
-        struct InputStruct * pNext;
-};
+enum CODE_TYPE { CODE_INPUT = 0, CODE_FILE };
 
 /* 删除文件夹 */
 void delet_dir();
-/* 显示 */
-void msg(unsigned short ram[500],unsigned short i, int *status);
-/* 输入 */
-struct InputStruct * New();
 /* 执行代码 */
-void code(int h,char filename[]);
+void code(int type, char filename[]);
 /* 帮助 */
 void help();
 
+/* 读取输入 */
+char *Input();
+/* 读取文件 */
+char *readfile(char *filename);

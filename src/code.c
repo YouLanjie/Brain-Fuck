@@ -1,209 +1,201 @@
 #include "../include/head.h"
 
-void code(int h, char filename[])
-{
-	struct InputStruct *pHead = NULL, *pTemp = NULL;	//用于输入的链表结构体
+/* 运行 */
+static int running(char *ch, FILE *fp);
+/* 显示界面 */
+static void msg(unsigned int ram[500], unsigned short i, int status);
 
-	long w[500];
-	int a = 0;
-	short status = 0;
-	unsigned short i = 0, w1 = 0, q = 1;	/* i用作表示模拟的指针所指的内存序号 */
-	unsigned short ram[500];	/*用于存储内存数据 */
-	char wh = 0;
+void code(int type, char filename[])
+{/*{{{*/
+	char *ch = NULL;
+	FILE *fp = NULL;
+	int stat = 0;
 
-	FILE *fp, *fp2;
-
-	//创建输入缓存
-	mkdir("Brain-Fuck", 0744);
-	if (h == 0) {
-		pHead = pTemp = New();	/* 获取输入 */
-		if (pHead == NULL) {
-			return;
-		}
-		fp = fopen(filename, "w");
+	if (type == CODE_INPUT) {
+		/* 创建输入缓存 */
+		mkdir("Brain-Fuck", 0744);
+		/* 获取输入 */
+		ch = Input();
+		fp = fopen(FILE_OUTPUT, "wb");
 		if (!fp) {
-			perror("\033[1;31m[Code]\033[0m");
+			attron(COLOR_PAIR(3));
+			printw("错误[Error]: 无法创建输出记录文件");
+			attroff(COLOR_PAIR(3));
+			refresh();
+			getch();
+		}
+	} else {
+		attron(COLOR_PAIR(3));
+		ch = readfile(filename);
+		attroff(COLOR_PAIR(3));
+		if (ch == NULL) {
+			refresh();
 			getch();
 			return;
 		}
-		while (pTemp != NULL) {
-			fprintf(fp, "%c", pTemp->m);
-			pTemp = pTemp->pNext;
-		}
-		free(pHead);
-		pHead = NULL;
-		fclose(fp);
-	}
-	attron(COLOR_PAIR(3));
-	//打开文件
-	fp = fopen(filename, "rb");
-	if (!fp) {
-		printw("错误[Error]: %s: 没有那个文件或目录",
-		       filename);
-		getch();
-		return;
-	}
-	for (i = 0; i < 500; i++) {
-		ram[i] = 0;
-	}
-	for (i = 0; i < 500; i++) {
-		w[i] = 0;
-	}
-	i = 0;
-	fp2 = fopen("./Brain-Fuck/output.txt", "wb");
-	if (!fp2) {
-		printw
-		    ("错误[Error]: 当前目录无法创建文件，无法记录输出\a\n");
-		getch();
-	}
-	attroff(COLOR_PAIR(3));
-	move(2, 15);
-	if (a != EOF) {
-		a = fgetc(fp);
-		if (a == '\r' || a == '\n') {
-			status = 1;
-		}
-		fseek(fp, 0L, 0);
 	}
 	move(0, 0);
 	def_prog_mode();
 	endwin();
 
-	while (a != EOF) {
-		a = fgetc(fp);
-		if (a == 0x5D && q == 0) {
-			q = 1;
-			continue;
+	stat = running(ch, fp);
+	if (stat < 0) {
+		printf("错误[Error]: %s: %s[Code:%d]\n", filename, "循环括号不匹配", stat);
+		if (type == CODE_FILE)
+			return;
+		reset_prog_mode();
+		refresh();
+		clear();
+		attron(COLOR_PAIR(3));
+		printw("错误[Error]: %s: %s[Code:%d]\n", filename, "循环括号不匹配", stat);
+		attroff(COLOR_PAIR(3));
+		refresh();
+		getch();
+		return;
+	}
+	/* asdfaeqoifajsdfk */
+	printf("\n\033[44m程序结束\n按下任意键继续\033[0m\n");
+	ctools_getch();
+	if (fp)
+		fclose(fp);
+	if (type == CODE_FILE)
+		return;
+	reset_prog_mode();
+	clear();
+	return;
+}/*}}}*/
+
+/* 待处理字符 */
+#define chp ch[i_c]
+/* 确保指针不越界的安全条件 */
+#define chs (ch[i_c] != '\0')
+
+static int running(char *ch, FILE *fp)
+{/*{{{*/
+	unsigned int ram[500] = {0},	/*用于存储内存数据 */
+		     i_r = 0,	/* 表示模拟的指针所指的内存序号 */
+		     i_c = 0;	/* 输入字符指针号 */
+	int flag_while = 0,	/* 循环层级标记 */
+	    flag_count = 0,	/* 循环符号标记 */
+	    flag_step = 0,	/* 调试用单步执行 */
+	    mode = 0;	/* 模式 */
+	int inp = 0;
+
+	if (ch[0] == '\n')
+		mode = 1;
+	while (ch[i_c] != '\0') {
+		if (flag_step) {
+			inp = ctools_getch();
+			if (inp == 'p' || inp == ' ')
+				flag_step = 0;
 		}
-		if (q == 0) {
-			continue;
-		}
-		switch (a) {
-		case 0x5B:	//"["循环开始
-			if (ram[i] != 0) {
-				w[w1] = ftell(fp) - 1L;
-				w1++;
-				wh = 0;
-			} else {
-				q = 0;
-			}
-			break;
-		case 0x5D:	//"]"循环结束
-			q = 1;
-			if (w1 == 0) {
-				printf("Waring!循环括号不匹配\n");
-				reset_prog_mode();
-				clear();
-				attron(COLOR_PAIR(3));
-				printw
-				    ("错误[Error]: %s: 循环括号不匹配\a",
-				     filename);
-				attroff(COLOR_PAIR(3));
-				getch();
-				if (fp) {
-					fclose(fp);
-				}
-				return;
+		switch (ch[i_c]) {
+		case '[':	//"["循环开始
+			flag_count++;
+			if (ram[i_r] != 0) {
+				flag_while++;
 				break;
-			} else {
-				w1--;
 			}
-			fseek(fp, w[w1], 0);
-			if (wh == 0) {
-				printf("Waring!循环无法终止\n");
-				reset_prog_mode();
-				clear();
-				attron(COLOR_PAIR(3));
-				printw
-				    ("错误[Error]: %s :循环内没有做任何有意义的动作\a",
-				     filename);
-				attroff(COLOR_PAIR(3));
-				getch();
-				if (fp) {
-					fclose(fp);
-				}
-				return;
+			i_c++;
+			for (int i = 1; chs && i > 0; i--) {
+				for (; chs && chp != ']'; i_c++)
+					if (chp == '[')
+						i++;
+				i_c++;
 			}
+			i_c--;
+			if (!chs) 
+				return -3;
 			break;
-		case 0x2E:	//"."显示
-			printf("%c", ram[i]);
-			refresh();
-			if (fp2) {	//将输出记录到文件里面
-				fprintf(fp2, "%c", ram[i]);
+		case ']':	//"]"循环结束
+			flag_count--;
+			if (flag_count < 0)
+				return -1;
+			if (flag_while <= 0)
+				continue;
+
+			i_c--;
+			for (int i = 1; chs && i > 0; i--) {
+				for (; chs && chp != '['; i_c--)
+					if (chp == ']')
+						i++;
+				i_c--;
 			}
+			i_c++;
+			if (!chs) 
+				return -2;
+			flag_while--;
+			continue;
+			break;
+		case '.':	//"."显示
+			printf("%c", ram[i_r]);
+			if (fp)	//将输出记录到文件里面
+				fprintf(fp, "%c", ram[i_r]);
 			ctools_kbhitGetchar();	//将缓存区的内容写入到文件里
-			msg(ram, i, (int *)&status);
+			msg(ram, i_r, mode);
 			ctools_kbhitGetchar();
 			break;
-		case 0x2C:	//","输入
-			ram[i] = getch();
-			wh++;
-			msg(ram, i, (int *)&status);
+		case ',':	//","输入
+			ram[i_r] = getch();
+			msg(ram, i_r, mode);
 			break;
-		case 0x3C:	//"<"左移
-			if (i == 0) {
-				i = 499;
-			} else {
-				i--;
-			}
-			wh++;
-			msg(ram, i, (int *)&status);
+		case '<':	//"<"左移
+			i_r = (i_r <= 0) ? 499 : i_r - 1;
+			msg(ram, i_r, mode);
 			break;
-		case 0x3E:	//">"右移
-			if (i == 499) {
-				i = 0;
-			} else {
-				i++;
-			}
-			wh++;
-			msg(ram, i, (int *)&status);
+		case '>':	//">"右移
+			i_r = (i_r >= 499) ? 0 : i_r + 1;
+			msg(ram, i_r, mode);
 			break;
-		case 0x2D:	//"-"减
-			if (ram[i] == 0) {
-				ram[i] = 259;
-			} else {
-				ram[i]--;
-			}
-			wh++;
-			msg(ram, i, (int *)&status);
+		case '-':	//"-"减
+			ram[i_r] = (ram[i_r] <= 0) ? 259 : ram[i_r] - 1;
+			msg(ram, i_r, mode);
 			break;
-		case 0x2B:	//"+"加
-			if (ram[i] == 259) {
-				ram[i] = 0;
-			} else {
-				ram[i]++;
-			}
-			wh++;
-			msg(ram, i, (int *)&status);
+		case '+':	//"+"加
+			ram[i_r] = (ram[i_r] >= 259) ? 0 : ram[i_r] + 1;
+			msg(ram, i_r, mode);
 			break;
 		default:	//其他跳过
 			break;
 		}
 		if (ctools_kbhit() == 1) {
-			getchar();
-			fclose(fp2);
-			fclose(fp);
-			reset_prog_mode();
-			clear();
-			return;
+			inp = getchar();
+			if (inp == 'p' || inp == ' ') {
+				printf("<Paused> Press any return\n");
+				ctools_getch();
+			} else if (inp == 'n') {
+			} else {
+				return 1;
+			}
 		}
+		i_c++;
 	}
-	attron(COLOR_PAIR(3));
-	printf("\033[43;37m");
-	if (status == 1) {
-		printf
-		    ("\r\n\033[16C程序结束\r\n\033[16C按下任意键继续");
-	} else {
-		printf("\r\n程序结束\r\n按下任意键继续\r\n");
-	}
-	printf("\033[0m");
-	ctools_getch();
-	fclose(fp);
-	if (fp2) {
-		fclose(fp2);
-	}
-	reset_prog_mode();
-	clear();
-	return;
-}
+	return 0;
+}/*}}}*/
 
+static void msg(unsigned int ram[500], unsigned short i, int status)
+{/*{{{*/
+	if (status != 1) {
+		return;
+	}
+	printf("\033[s\033[5;1H");
+	for (int count = -5; count < 7; count++) {
+		int tmp = i + count;
+		tmp = (tmp >= 0) ? tmp % 500 : tmp + 500;
+		printf("%s[%3d]%s", count == 0 ? "\033[44m": "", tmp,
+		       count == 0 ? "\033[0m": "");
+	}
+	printf("\n");
+	for (int count = -5; count < 7; count++) {
+		int tmp = i + count;
+		tmp = (tmp >= 0) ? tmp % 500 : tmp + 500;
+		if (count == 0)
+			printf("\033[44m");
+		printf("%s[%3d]%s", count == 0 ? "\033[44m": "", ram[tmp],
+		       count == 0 ? "\033[0m": "");
+	}
+	printf("\n");
+	printf("\033[u");
+	/*usleep(1000000 / 20);*/
+	return;
+}/*}}}*/
