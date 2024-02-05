@@ -1,13 +1,13 @@
 #include "../include/head.h"
 
 void help() {
+	struct ctools ctools = ctools_init();
 	struct ctools_menu_t * help = NULL;
+	ctools.menu.data_init(&help);
 
-	CT_MENU.data_init(&help);
-
-	CT_MENU.set_title(help, "帮助 ");
-	CT_MENU.set_type(help, "help");
-	CT_MENU.set_text(help,
+	ctools.menu.set_title(help, "帮助 ");
+	ctools.menu.set_type(help, "help");
+	ctools.menu.set_text(help,
 			"1.↑上翻，↓下翻",
 			"2.输入代码时按下Esc退出",
 			"3.存储条只有500个",
@@ -20,7 +20,7 @@ void help() {
 			"7.输入执行代码时先回车再输入还可以显示内存条的状态、数值，方便调试程序",
 			NULL);
 
-	CT_MENU.show(help);
+	ctools.menu.show(help);
 	return;
 }
 

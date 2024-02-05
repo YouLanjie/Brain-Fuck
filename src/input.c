@@ -10,6 +10,7 @@ static struct Inp_s *Inp_new(void);
 
 char *Input()
 {				/*{{{ */
+	struct ctools ctools = ctools_init();
 	struct Inp_s *pHead = NULL;
 	struct Inp_s *pNew = NULL;
 	struct Inp_s *pLast = NULL;
@@ -25,7 +26,7 @@ char *Input()
 		refresh();
 		inp = getch();
 		if (inp == 0x1B) {	/* <ESC> */
-			inp = (ctools_kbhit() == 0) ? 0x1B : getchar()
+			inp = (ctools.kbhit() == 0) ? 0x1B : getchar()
 			    && getchar();
 			continue;
 		} else if (inp == 0x7F) {	/* <Backspace> */
@@ -76,8 +77,6 @@ char *readfile(char *filename)
 	FILE *fp;
 	fp = fopen(filename, "r");
 	if (!fp) {
-		printw("错误[Error]: %s: %s",
-		       filename, "没有那个文件或目录");
 		return NULL;
 	}
 	long size = 0L;
