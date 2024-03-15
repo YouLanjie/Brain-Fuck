@@ -53,7 +53,6 @@ int code(int type, char filename[])
 
 static int running(int type, char *ch, FILE *fp)
 {/*{{{*/
-	struct ctools ctools = ctools_init();
 	unsigned int ram[500] = {0},	/*用于存储内存数据 */
 		     i_r = 0,	/* 表示模拟的指针所指的内存序号 */
 		     i_c = 0;	/* 输入字符指针号 */
@@ -92,7 +91,7 @@ static int running(int type, char *ch, FILE *fp)
 				inp = wgetch(win2);
 			}
 			if (type == CODE_FILE)
-				inp = ctools.getcha();
+				inp = _getch();
 			else if (!mode)
 				inp = wgetch(win1);
 			if (inp == 'p' || inp == ' ') {
@@ -149,9 +148,9 @@ static int running(int type, char *ch, FILE *fp)
 			}
 			if (fp)	//将输出记录到文件里面
 				fprintf(fp, "%c", ram[i_r]);
-			ctools.kbhitGetchar();	//将缓存区的内容写入到文件里
+			kbhitGetchar();	//将缓存区的内容写入到文件里
 			msg(win2, ram, i_r);
-			ctools.kbhitGetchar();
+			kbhitGetchar();
 			break;
 		case ',':	//","输入
 			ram[i_r] = getch();
@@ -176,12 +175,12 @@ static int running(int type, char *ch, FILE *fp)
 		default:	//其他跳过
 			break;
 		}
-		if (ctools.kbhit() == 1) {
+		if (kbhit() == 1) {
 			inp = getchar();
 			if (inp == 'p' || inp == ' ') {
 				if (type == CODE_FILE) {
 					printf("<Paused> Press any return\n");
-					ctools.getcha();
+					_getch();
 				} else {
 					if (mode){
 						wmove(win2, 3, 2);
@@ -208,7 +207,7 @@ static int running(int type, char *ch, FILE *fp)
 		printf("\n"
 		       "\033[44m程序结束\033[0m\n"
 		       "\033[44m按下任意键继续\033[0m\n");
-		ctools.getcha();
+		_getch();
 	} else {
 		if (!mode)
 			win2 = win1;

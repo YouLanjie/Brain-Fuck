@@ -12,16 +12,12 @@
 
 void settings()
 {
-	const struct ctools_menu m = ctools_init().menu;
-	struct ctools_menu_t * data = NULL;
+	cmenu data = cmenu_create();
 
-	m.data_init(&data);
-	m.set_title(data, "游戏设置");
-	m.set_type(data, "setting");
-	m.set_text(data, "存储输入和输出", NULL);
-	m.set_text_data(data, "describe", "%s", "在本地存储数据目录");
-	m.set_text_data(data, "type", "%s", "button");
-	m.set_text_data(data, "var", "%s", &flag_file);
-	m.show(data);
+	cmenu_set_title(data, "游戏设置");
+	cmenu_set_type(data, "setting");
+	cmenu_add_text(data, 0, "存储输入和输出", "在本地存储数据目录", NULL,
+		       &flag_file, "button", 0, 0, 0);
+	cmenu_show(data);
 }
 

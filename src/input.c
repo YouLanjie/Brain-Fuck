@@ -10,7 +10,6 @@ static struct Inp_s *Inp_new(void);
 
 char *Input()
 {				/*{{{ */
-	struct ctools ctools = ctools_init();
 	struct Inp_s *pHead = NULL;
 	struct Inp_s *pNew = NULL;
 	struct Inp_s *pLast = NULL;
@@ -26,7 +25,7 @@ char *Input()
 		refresh();
 		inp = getch();
 		if (inp == 0x1B) {	/* <ESC> */
-			inp = (ctools.kbhit() == 0) ? 0x1B : getchar()
+			inp = (kbhit() == 0) ? 0x1B : getchar()
 			    && getchar();
 			continue;
 		} else if (inp == 0x7F) {	/* <Backspace> */
