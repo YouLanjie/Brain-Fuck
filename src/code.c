@@ -6,7 +6,7 @@ static int running(int type, char *ch, FILE *fp);
 static void msg(WINDOW *win, unsigned int ram[500], unsigned short i);
 
 int code(int type, char filename[])
-{/*{{{*/
+{
 	char *ch = NULL;
 	FILE *fp = NULL;
 	int stat = 0;
@@ -18,16 +18,13 @@ int code(int type, char filename[])
 			/* 创建输入缓存 */
 			mkdir("Brain-Fuck", 0744);
 			fp = fopen(FILE_INPUT, "w");
-			if (!fp) {
+			if (!fp)
 				return -1;
-			} else {
-				fwrite(ch, 1, strlen(ch), fp);
-				fclose(fp);
-			}
+			fwrite(ch, 1, strlen(ch), fp);
+			fclose(fp);
 			fp = fopen(FILE_OUTPUT, "w");
-			if (!fp) {
+			if (!fp)
 				return -2;
-			}
 		}
 	} else {
 		ch = readfile(filename);
@@ -37,14 +34,12 @@ int code(int type, char filename[])
 
 	stat = running(type, ch, fp);
 
-	if (stat < 0) {
+	if (stat < 0)
 		return stat;
-	}
-
 	if (fp)
 		fclose(fp);
 	return 0;
-}/*}}}*/
+}
 
 /* 待处理字符 */
 #define chp ch[i_c]
@@ -52,7 +47,7 @@ int code(int type, char filename[])
 #define chs (ch[i_c] != '\0')
 
 static int running(int type, char *ch, FILE *fp)
-{/*{{{*/
+{
 	unsigned int ram[500] = {0},	/*用于存储内存数据 */
 		     i_r = 0,	/* 表示模拟的指针所指的内存序号 */
 		     i_c = 0;	/* 输入字符指针号 */
@@ -96,9 +91,10 @@ static int running(int type, char *ch, FILE *fp)
 				inp = wgetch(win1);
 			if (inp == 'p' || inp == ' ') {
 				flag_step = 0;
-				if (mode)
+				if (mode) {
 					wclear(win2);
 					box(win2, 0, 0);
+				}
 			}
 		}
 		switch (ch[i_c]) {
@@ -212,7 +208,9 @@ static int running(int type, char *ch, FILE *fp)
 		if (!mode)
 			win2 = win1;
 		wattron(win2, COLOR_PAIR(252));
-		wmove(win2, 3, 2);
+		if (mode)
+			wmove(win2, 3, 2);
+		wmove(win1, 0, 0);
 		wprintw(win2, "程序结束,按下任意键返回");
 		wattroff(win2, COLOR_PAIR(252));
 		wrefresh(win2);
@@ -224,10 +222,10 @@ static int running(int type, char *ch, FILE *fp)
 		clear();
 	}
 	return flag_exit;
-}/*}}}*/
+}
 
 static void msg(WINDOW *win, unsigned int ram[500], unsigned short i)
-{				/*{{{ */
+{
 	if (win == NULL) {
 		return;
 	}
@@ -254,4 +252,4 @@ static void msg(WINDOW *win, unsigned int ram[500], unsigned short i)
 	wrefresh(win);
 	/*usleep(1000000 / 20); */
 	return;
-}				/*}}} */
+}
